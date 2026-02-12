@@ -9,6 +9,7 @@ interface FooterWithSocialBlockComponentProps {
   onContentChange: (field: string, value: any) => void;
   onSocialUpdate: (social: any) => void;
   onElementSelect?: (element: string) => void;
+  onBlockSelect?: (blockId: string) => void;
 }
 
 export const FooterWithSocialBlockComponent: React.FC<
@@ -20,6 +21,7 @@ export const FooterWithSocialBlockComponent: React.FC<
   onContentChange,
   onSocialUpdate,
   onElementSelect,
+  onBlockSelect,
 }) => {
   const handleFieldChange = (
     field: keyof typeof block,
@@ -34,6 +36,14 @@ export const FooterWithSocialBlockComponent: React.FC<
     onSocialUpdate(socialData);
   };
 
+  const handleElementSelect = (element: string) => {
+    // Ensure block is selected when selecting footer element
+    if (onBlockSelect) {
+      onBlockSelect(block.id);
+    }
+    onElementSelect?.(element);
+  };
+
   return (
     <footer
       className={`transition-all ${isSelected ? "ring-2 ring-valasys-orange" : ""}`}
@@ -46,7 +56,10 @@ export const FooterWithSocialBlockComponent: React.FC<
       <div className="space-y-4">
         {/* Social Media Section */}
         <div
-          onClick={() => onElementSelect?.("social")}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleElementSelect("social");
+          }}
           className={`py-4 px-2 cursor-pointer hover:bg-gray-50 rounded transition-all ${
             selectedElement === "social" ? "ring-2 ring-valasys-orange" : ""
           }`}
@@ -123,7 +136,7 @@ export const FooterWithSocialBlockComponent: React.FC<
           }`}
           onClick={(e) => {
             e.stopPropagation();
-            onElementSelect?.("enterpriseName");
+            handleElementSelect("enterpriseName");
           }}
         >
           {selectedElement === "enterpriseName" ? (
@@ -166,7 +179,7 @@ export const FooterWithSocialBlockComponent: React.FC<
           }`}
           onClick={(e) => {
             e.stopPropagation();
-            onElementSelect?.("address");
+            handleElementSelect("address");
           }}
         >
           {selectedElement === "address" ? (
@@ -212,7 +225,7 @@ export const FooterWithSocialBlockComponent: React.FC<
           }`}
           onClick={(e) => {
             e.stopPropagation();
-            onElementSelect?.("subscriptionText");
+            handleElementSelect("subscriptionText");
           }}
         >
           {selectedElement === "subscriptionText" ? (
@@ -257,7 +270,7 @@ export const FooterWithSocialBlockComponent: React.FC<
           }`}
           onClick={(e) => {
             e.stopPropagation();
-            onElementSelect?.("unsubscribeLink");
+            handleElementSelect("unsubscribeLink");
           }}
         >
           {selectedElement === "unsubscribeLink" ? (

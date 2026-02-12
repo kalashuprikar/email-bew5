@@ -210,6 +210,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             }
             onSocialUpdate={(social) => onBlockUpdate({ ...block, social })}
             onElementSelect={onFooterElementSelect}
+            onBlockSelect={onBlockSelect}
           />
         </div>
       );
