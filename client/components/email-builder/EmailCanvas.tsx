@@ -211,11 +211,12 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
                         {inlineBlocks.map((inlineBlock, i) => (
                           <div
                             key={inlineBlock.id}
-                            className={hasLeftRightAlignment ? "inline-block" : "w-full"}
+                            className="flex-shrink-0"
                             onClick={(e) => e.stopPropagation()}
                             style={{
-                              display: hasLeftRightAlignment ? "inline-block" : "block",
-                              verticalAlign: "middle",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
                               flexShrink: 0
                             }}
                           >
