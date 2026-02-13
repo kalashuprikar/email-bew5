@@ -84,7 +84,7 @@ export const FooterWithContactBlockComponent: React.FC<
     });
   };
 
-  const renderSection = (label: string, sectionType: string, section: any, isTextarea: boolean = false) => {
+  const renderSection = (label: string, sectionType: string, section: any, isTextarea: boolean = false, alignment: string = "left") => {
     const content = section.content || section.text || "";
     
     return (
@@ -147,6 +147,7 @@ export const FooterWithContactBlockComponent: React.FC<
                   fontStyle: section.fontStyle || "normal",
                   margin: 0,
                   padding: `${section.padding}px`,
+                  textAlign: alignment as any,
                 }}
               >
                 {content}
@@ -227,6 +228,7 @@ export const FooterWithContactBlockComponent: React.FC<
                   fontStyle: duplicate.fontStyle || "normal",
                   margin: 0,
                   padding: `${duplicate.padding}px`,
+                  textAlign: alignment as any,
                 }}
               >
                 {duplicate.content || duplicate.text || ""}
@@ -264,13 +266,24 @@ export const FooterWithContactBlockComponent: React.FC<
         padding: `${block.padding}px`,
       }}
     >
-      <div className="space-y-4">
-        {renderSection("Enterprise Name", "enterpriseName", block.enterpriseName)}
-        {renderSection("Address", "address", block.address, true)}
-        {renderSection("Privacy Links", "privacyLinks", block.privacyLinks)}
-        {renderSection("Email", "email", block.email)}
-        {renderSection("Phone", "phone", block.phone)}
-        {renderSection("Unsubscribe", "unsubscribeLink", block.unsubscribeLink)}
+      <div className="flex gap-8 mb-4">
+        {/* Left Column */}
+        <div className="flex-1">
+          {renderSection("Enterprise Name", "enterpriseName", block.enterpriseName, false, "left")}
+          {renderSection("Address", "address", block.address, true, "left")}
+        </div>
+
+        {/* Right Column */}
+        <div className="flex-1">
+          {renderSection("Privacy Links", "privacyLinks", block.privacyLinks, false, "right")}
+          {renderSection("Email", "email", block.email, false, "right")}
+          {renderSection("Phone", "phone", block.phone, false, "right")}
+        </div>
+      </div>
+
+      {/* Unsubscribe Link */}
+      <div className="border-t pt-4">
+        {renderSection("Unsubscribe", "unsubscribeLink", block.unsubscribeLink, false, "center")}
       </div>
     </footer>
   );
