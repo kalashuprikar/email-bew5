@@ -1,5 +1,4 @@
 import React from "react";
-import React from "react";
 import { LandingPageBlock } from "./types";
 import { EditableLink } from "./EditableLink";
 
