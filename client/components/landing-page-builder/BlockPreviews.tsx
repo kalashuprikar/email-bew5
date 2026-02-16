@@ -109,8 +109,8 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
 
       {/* Menu Dropdown - Visible when hamburger is clicked */}
       {isMenuOpen && (
-        <div className="bg-white border-t border-gray-200">
-          <div className="flex flex-col px-4 py-3 space-y-1">
+        <div className="bg-gray-700 border-t border-gray-600">
+          <div className="flex flex-col px-4 py-4 space-y-3">
             {props.navigationLinks?.map((link: any, i: number) => (
               <div
                 key={i}
@@ -121,16 +121,13 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
                 }}
                 onMouseEnter={() => setHoveredLinkIndex(i)}
                 onMouseLeave={() => setHoveredLinkIndex(null)}
-                className="hover:bg-gray-50 rounded transition-all"
+                className={`py-2 px-3 rounded text-base font-medium cursor-pointer transition-all ${
+                  selectedNavLinkIndex === i
+                    ? "bg-valasys-orange text-white"
+                    : "text-gray-100 hover:bg-gray-600"
+                }`}
               >
-                <EditableLink
-                  label={link.label}
-                  href={link.href}
-                  onUpdate={(label, href) => handleLinkUpdate(i, label, href)}
-                  inline={true}
-                  isSelected={selectedNavLinkIndex === i}
-                  isHovered={hoveredLinkIndex === i}
-                />
+                {link.label}
               </div>
             ))}
           </div>
