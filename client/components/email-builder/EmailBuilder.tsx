@@ -91,14 +91,15 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
     (block: ContentBlock, position?: number) => {
       setTemplate((prev) => {
         const newBlocks = [...prev.blocks];
-        // Use position if it's a valid number
-        const insertPosition =
-          typeof position === "number" && position >= 0 && position <= newBlocks.length
-            ? position
-            : newBlocks.length;
-
-        newBlocks.splice(insertPosition, 0, block);
-
+        if (
+          position !== undefined &&
+          position >= 0 &&
+          position <= newBlocks.length
+        ) {
+          newBlocks.splice(position, 0, block);
+        } else {
+          newBlocks.push(block);
+        }
         return {
           ...prev,
           blocks: newBlocks,
