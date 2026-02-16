@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { EmailTemplate, ContentBlock } from "./types";
+import { EmailTemplate, ContentBlock, EmailSection } from "./types";
 import { BlocksPanel } from "./BlocksPanel";
 import { SettingsPanel } from "./SettingsPanel";
 import { BlockRenderer } from "./BlockRenderer";
@@ -31,6 +31,14 @@ import {
   deleteTemplateFromLocalStorage,
   generateId,
   renderTemplateToHTML,
+  createEmptySection,
+  addBlockToSection,
+  removeBlockFromSection,
+  updateBlockInSection,
+  moveBlockWithinSection,
+  addSectionToTemplate,
+  removeSectionFromTemplate,
+  updateSectionInTemplate,
 } from "./utils";
 import { Save, Eye, Edit, Trash2, Plus, ChevronLeft, Code, Sparkles, Layout } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -214,6 +222,131 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
     }));
   }, []);
 
+  // Section handlers
+  const handleAddSection = useCallback(() => {
+    setTemplate((prev) => addSectionToTemplate(prev, createEmptySection()));
+  }, []);
+
+  const handleDeleteSection = useCallback((sectionId: string) => {
+    setTemplate((prev) => removeSectionFromTemplate(prev, sectionId));
+  }, []);
+
+  const handleUpdateSection = useCallback((section: EmailSection) => {
+    setTemplate((prev) => updateSectionInTemplate(prev, section));
+  }, []);
+
+  const handleBlockDropInSection = useCallback(
+    (block: ContentBlock, sectionId: string, position?: number) => {
+      setTemplate((prev) => {
+        const sections = [...(prev.sections || [])];
+        const sectionIndex = sections.findIndex((s) => s.id === sectionId);
+        if (sectionIndex !== -1) {
+          sections[sectionIndex] = addBlockToSection(
+            sections[sectionIndex],
+            block,
+            position,
+          );
+        }
+        return {
+          ...prev,
+          sections,
+          updatedAt: new Date().toISOString(),
+        };
+      });
+    },
+    [],
+  );
+
+  const handleBlockUpdateInSection = useCallback(
+    (block: ContentBlock, sectionId: string) => {
+      setTemplate((prev) => {
+        const sections = [...(prev.sections || [])];
+        const sectionIndex = sections.findIndex((s) => s.id === sectionId);
+        if (sectionIndex !== -1) {
+          sections[sectionIndex] = updateBlockInSection(
+            sections[sectionIndex],
+            block,
+          );
+        }
+        return {
+          ...prev,
+          sections,
+          updatedAt: new Date().toISOString(),
+        };
+      });
+    },
+    [],
+  );
+
+  const handleBlockDeleteInSection = useCallback(
+    (blockId: string, sectionId: string) => {
+      setTemplate((prev) => {
+        const sections = [...(prev.sections || [])];
+        const sectionIndex = sections.findIndex((s) => s.id === sectionId);
+        if (sectionIndex !== -1) {
+          sections[sectionIndex] = removeBlockFromSection(
+            sections[sectionIndex],
+            blockId,
+          );
+        }
+        return {
+          ...prev,
+          sections,
+          updatedAt: new Date().toISOString(),
+        };
+      });
+    },
+    [],
+  );
+
+  const handleMoveBlockWithinSection = useCallback(
+    (blockIndex: number, hoverIndex: number, sectionId: string) => {
+      setTemplate((prev) => {
+        const sections = [...(prev.sections || [])];
+        const sectionIndex = sections.findIndex((s) => s.id === sectionId);
+        if (sectionIndex !== -1) {
+          sections[sectionIndex] = moveBlockWithinSection(
+            sections[sectionIndex],
+            blockIndex,
+            hoverIndex,
+          );
+        }
+        return {
+          ...prev,
+          sections,
+          updatedAt: new Date().toISOString(),
+        };
+      });
+    },
+    [],
+  );
+
+  const handleDuplicateBlockInSection = useCallback(
+    (block: ContentBlock, sectionId: string, position: number) => {
+      const duplicatedBlock: ContentBlock = {
+        ...JSON.parse(JSON.stringify(block)),
+        id: generateId(),
+      };
+      setTemplate((prev) => {
+        const sections = [...(prev.sections || [])];
+        const sectionIndex = sections.findIndex((s) => s.id === sectionId);
+        if (sectionIndex !== -1) {
+          sections[sectionIndex] = addBlockToSection(
+            sections[sectionIndex],
+            duplicatedBlock,
+            position,
+          );
+        }
+        return {
+          ...prev,
+          sections,
+          updatedAt: new Date().toISOString(),
+        };
+      });
+    },
+    [],
+  );
+
   return (
     <DashboardLayout>
       <DndProvider backend={HTML5Backend}>
@@ -396,6 +529,14 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
                   onMoveBlock={handleMoveBlock}
                   onDuplicateBlock={handleDuplicateBlock}
                   onDeleteBlock={handleDeleteBlockById}
+                  onAddSection={handleAddSection}
+                  onDeleteSection={handleDeleteSection}
+                  onSectionUpdate={handleUpdateSection}
+                  onBlockDropInSection={handleBlockDropInSection}
+                  onBlockUpdateInSection={handleBlockUpdateInSection}
+                  onBlockDeleteInSection={handleBlockDeleteInSection}
+                  onMoveBlockWithinSection={handleMoveBlockWithinSection}
+                  onDuplicateBlockInSection={handleDuplicateBlockInSection}
                 />
 
                 {/* Right Sidebar - Settings Panel */}

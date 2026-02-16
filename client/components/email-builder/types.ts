@@ -613,11 +613,26 @@ export type ContentBlock =
   | FeaturesBlock
   | PromoBlock;
 
+export interface EmailSection {
+  id: string;
+  name: string;
+  blocks: ContentBlock[];
+  backgroundColor: string;
+  padding: number;
+  margin: number;
+  borderWidth: number;
+  borderColor: string;
+  borderRadius: number;
+  minHeight?: number;
+}
+
 export interface EmailTemplate {
   id: string;
   name: string;
   subject: string;
-  blocks: ContentBlock[];
+  blocks?: ContentBlock[]; // For backward compatibility
+  sections?: EmailSection[]; // New section-based structure
+  useSections?: boolean; // Flag to determine if template uses sections
   createdAt: string;
   updatedAt: string;
   backgroundColor: string;

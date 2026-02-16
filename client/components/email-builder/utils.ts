@@ -1,6 +1,7 @@
 import {
   ContentBlock,
   EmailTemplate,
+  EmailSection,
   TitleBlock,
   TextBlock,
   ImageBlock,
@@ -1500,4 +1501,134 @@ export function deleteTemplateFromLocalStorage(id: string): void {
 export function getTemplateById(id: string): EmailTemplate | null {
   const templates = getTemplatesFromLocalStorage();
   return templates.find((t) => t.id === id) || null;
+}
+
+// Section-related utilities
+export function createEmptySection(name = "New Section"): EmailSection {
+  return {
+    id: generateId(),
+    name,
+    blocks: [],
+    backgroundColor: "#ffffff",
+    padding: 20,
+    margin: 0,
+    borderWidth: 0,
+    borderColor: "#000000",
+    borderRadius: 0,
+    minHeight: 100,
+  };
+}
+
+export function addBlockToSection(
+  section: EmailSection,
+  block: ContentBlock,
+  position?: number,
+): EmailSection {
+  const newBlocks = [...section.blocks];
+  if (
+    position !== undefined &&
+    position >= 0 &&
+    position <= newBlocks.length
+  ) {
+    newBlocks.splice(position, 0, block);
+  } else {
+    newBlocks.push(block);
+  }
+
+  return {
+    ...section,
+    blocks: newBlocks,
+  };
+}
+
+export function removeBlockFromSection(
+  section: EmailSection,
+  blockId: string,
+): EmailSection {
+  return {
+    ...section,
+    blocks: section.blocks.filter((b) => b.id !== blockId),
+  };
+}
+
+export function updateBlockInSection(
+  section: EmailSection,
+  block: ContentBlock,
+): EmailSection {
+  return {
+    ...section,
+    blocks: section.blocks.map((b) => (b.id === block.id ? block : b)),
+  };
+}
+
+export function moveBlockWithinSection(
+  section: EmailSection,
+  fromIndex: number,
+  toIndex: number,
+): EmailSection {
+  const newBlocks = [...section.blocks];
+  const block = newBlocks[fromIndex];
+  newBlocks.splice(fromIndex, 1);
+  newBlocks.splice(toIndex, 0, block);
+
+  return {
+    ...section,
+    blocks: newBlocks,
+  };
+}
+
+export function addSectionToTemplate(
+  template: EmailTemplate,
+  section: EmailSection,
+): EmailTemplate {
+  const sections = [...(template.sections || [])];
+  sections.push(section);
+
+  return {
+    ...template,
+    sections,
+    useSections: true,
+  };
+}
+
+export function removeSectionFromTemplate(
+  template: EmailTemplate,
+  sectionId: string,
+): EmailTemplate {
+  const sections = (template.sections || []).filter((s) => s.id !== sectionId);
+
+  return {
+    ...template,
+    sections,
+  };
+}
+
+export function updateSectionInTemplate(
+  template: EmailTemplate,
+  section: EmailSection,
+): EmailTemplate {
+  const sections = (template.sections || []).map((s) =>
+    s.id === section.id ? section : s,
+  );
+
+  return {
+    ...template,
+    sections,
+  };
+}
+
+export function moveSectionInTemplate(
+  template: EmailTemplate,
+  fromIndex: number,
+  toIndex: number,
+): EmailTemplate {
+  const sections = [...(template.sections || [])];
+  const section = sections[fromIndex];
+  sections.splice(fromIndex, 1);
+  sections.splice(toIndex, 0, section);
+
+  return {
+    ...template,
+    sections,
+  };
 }
