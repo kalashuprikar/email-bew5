@@ -304,6 +304,66 @@ export const createPricingFooterBlock = (): LandingPageBlock => ({
   },
 });
 
+export const createHeadingBlock = (level: "h1" | "h2" | "h3" = "h1"): LandingPageBlock => ({
+  id: `heading-${Date.now()}`,
+  type: "heading",
+  properties: {
+    text: "Your Heading Here",
+    level,
+    textColor: "#1f2937",
+    fontSize: level === "h1" ? "3rem" : level === "h2" ? "2rem" : "1.5rem",
+    fontWeight: "bold",
+    textAlign: "left",
+    backgroundColor: "#ffffff",
+    padding: "20px",
+  },
+});
+
+export const createParagraphBlock = (): LandingPageBlock => ({
+  id: `paragraph-${Date.now()}`,
+  type: "paragraph",
+  properties: {
+    text: "This is a paragraph block. Add your body text, descriptions, or any other content here.",
+    textColor: "#4b5563",
+    fontSize: "1rem",
+    lineHeight: "1.6",
+    textAlign: "left",
+    backgroundColor: "#ffffff",
+    padding: "20px",
+  },
+});
+
+export const createRichTextBlock = (): LandingPageBlock => ({
+  id: `rich-text-${Date.now()}`,
+  type: "rich-text",
+  properties: {
+    text: "<p>This is a <strong>rich text</strong> block with <em>formatting options</em>. You can add <u>underlined</u> text, <a href=\"#\">links</a>, and more.</p><ul><li>Bullet point 1</li><li>Bullet point 2</li></ul>",
+    textColor: "#4b5563",
+    fontSize: "1rem",
+    lineHeight: "1.6",
+    textAlign: "left",
+    backgroundColor: "#ffffff",
+    padding: "20px",
+  },
+});
+
+export const createQuoteBlock = (): LandingPageBlock => ({
+  id: `quote-${Date.now()}`,
+  type: "quote",
+  properties: {
+    quoteText: "The only way to do great work is to love what you do.",
+    authorName: "Steve Jobs",
+    textColor: "#1f2937",
+    quoteSize: "1.5rem",
+    authorSize: "0.875rem",
+    backgroundColor: "#f3f4f6",
+    borderColor: "#FF6A00",
+    borderWidth: "4px",
+    borderPosition: "left",
+    padding: "24px",
+  },
+});
+
 // Template block creators that return arrays of blocks
 export const createMeetFramerTemplate = (): LandingPageBlock[] => [
   createHeroBlock(),

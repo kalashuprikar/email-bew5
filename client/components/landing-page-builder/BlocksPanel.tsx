@@ -28,6 +28,10 @@ import {
   createFaqBlock,
   createSignupBlock,
   createPricingFooterBlock,
+  createHeadingBlock,
+  createParagraphBlock,
+  createRichTextBlock,
+  createQuoteBlock,
 } from "./utils";
 import { LandingPageBlock } from "./types";
 

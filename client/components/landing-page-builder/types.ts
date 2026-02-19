@@ -12,7 +12,11 @@ export interface LandingPageBlock {
     | "pricing"
     | "faq"
     | "signup"
-    | "pricing-footer";
+    | "pricing-footer"
+    | "heading"
+    | "paragraph"
+    | "rich-text"
+    | "quote";
   properties: Record<string, any>;
   children?: LandingPageBlock[];
 }

@@ -22,6 +22,10 @@ import {
   FaqBlockPreview,
   SignupBlockPreview,
   PricingFooterBlockPreview,
+  HeadingBlockPreview,
+  ParagraphBlockPreview,
+  RichTextBlockPreview,
+  QuoteBlockPreview,
 } from "./BlockPreviews";
 import {
   createHeaderBlock,
@@ -36,6 +40,10 @@ import {
   createFaqBlock,
   createSignupBlock,
   createPricingFooterBlock,
+  createHeadingBlock,
+  createParagraphBlock,
+  createRichTextBlock,
+  createQuoteBlock,
 } from "./utils";
 
 interface DraggableLandingPagePreviewProps {
@@ -66,6 +74,10 @@ const BLOCK_CREATORS = {
   faq: createFaqBlock,
   signup: createSignupBlock,
   "pricing-footer": createPricingFooterBlock,
+  heading: () => createHeadingBlock("h2"),
+  paragraph: createParagraphBlock,
+  "rich-text": createRichTextBlock,
+  quote: createQuoteBlock,
 };
 
 const DragItem: React.FC<{
@@ -190,6 +202,18 @@ const DragItem: React.FC<{
     case "pricing-footer":
       blockContent = <PricingFooterBlockPreview {...blockProps} />;
       break;
+    case "heading":
+      blockContent = <HeadingBlockPreview {...blockProps} />;
+      break;
+    case "paragraph":
+      blockContent = <ParagraphBlockPreview {...blockProps} />;
+      break;
+    case "rich-text":
+      blockContent = <RichTextBlockPreview {...blockProps} />;
+      break;
+    case "quote":
+      blockContent = <QuoteBlockPreview {...blockProps} />;
+      break;
     default:
       blockContent = <div>Unknown block type</div>;
   }
@@ -296,6 +320,18 @@ const DragItem: React.FC<{
                 onClick={() => handleAddBlock("pricing-footer")}
               >
                 Pricing Footer
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleAddBlock("heading")}>
+                Heading
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleAddBlock("paragraph")}>
+                Paragraph
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleAddBlock("rich-text")}>
+                Rich Text
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleAddBlock("quote")}>
+                Quote
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

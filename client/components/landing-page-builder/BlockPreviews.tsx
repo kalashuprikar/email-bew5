@@ -1211,3 +1211,373 @@ export const PricingFooterBlockPreview: React.FC<BlockPreviewProps> = ({
     </div>
   );
 };
+
+export const HeadingBlockPreview: React.FC<BlockPreviewProps> = ({
+  block,
+  isSelected,
+  onSelect,
+  onUpdate,
+}) => {
+  const props = block.properties;
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editText, setEditText] = React.useState(props.text || "");
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const handleSave = () => {
+    if (editText.trim()) {
+      onUpdate({ ...props, text: editText });
+    }
+    setIsEditing(false);
+  };
+
+  const adjustHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  return (
+    <div
+      onClick={onSelect}
+      className={`cursor-pointer transition-all border ${
+        isSelected ? "border-valasys-orange" : "border-gray-200"
+      }`}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        padding: props.padding || "20px",
+      }}
+    >
+      {isEditing ? (
+        <textarea
+          ref={textareaRef}
+          value={editText}
+          onChange={(e) => {
+            setEditText(e.target.value);
+            adjustHeight();
+          }}
+          onBlur={handleSave}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setEditText(props.text || "");
+              setIsEditing(false);
+            }
+          }}
+          className="w-full focus:outline-none bg-transparent resize-none overflow-hidden whitespace-pre-wrap break-words"
+          style={{
+            color: props.textColor || "#1f2937",
+            fontSize: props.fontSize || "2rem",
+            fontWeight: props.fontWeight || "bold",
+            textAlign: props.textAlign || "left" as any,
+          }}
+          autoFocus
+        />
+      ) : (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditText(props.text || "");
+            setIsEditing(true);
+          }}
+          style={{
+            color: props.textColor || "#1f2937",
+            fontSize: props.fontSize || "2rem",
+            fontWeight: props.fontWeight || "bold",
+            textAlign: props.textAlign || "left" as any,
+          }}
+          className="cursor-text break-words whitespace-pre-wrap"
+        >
+          {props.text || "Heading Text"}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const ParagraphBlockPreview: React.FC<BlockPreviewProps> = ({
+  block,
+  isSelected,
+  onSelect,
+  onUpdate,
+}) => {
+  const props = block.properties;
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editText, setEditText] = React.useState(props.text || "");
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const handleSave = () => {
+    if (editText.trim()) {
+      onUpdate({ ...props, text: editText });
+    }
+    setIsEditing(false);
+  };
+
+  const adjustHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  return (
+    <div
+      onClick={onSelect}
+      className={`cursor-pointer transition-all border ${
+        isSelected ? "border-valasys-orange" : "border-gray-200"
+      }`}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        padding: props.padding || "20px",
+      }}
+    >
+      {isEditing ? (
+        <textarea
+          ref={textareaRef}
+          value={editText}
+          onChange={(e) => {
+            setEditText(e.target.value);
+            adjustHeight();
+          }}
+          onBlur={handleSave}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setEditText(props.text || "");
+              setIsEditing(false);
+            }
+          }}
+          className="w-full focus:outline-none bg-transparent resize-none overflow-hidden whitespace-pre-wrap break-words"
+          style={{
+            color: props.textColor || "#4b5563",
+            fontSize: props.fontSize || "1rem",
+            lineHeight: props.lineHeight || "1.6",
+            textAlign: props.textAlign || "left" as any,
+          }}
+          autoFocus
+        />
+      ) : (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditText(props.text || "");
+            setIsEditing(true);
+          }}
+          style={{
+            color: props.textColor || "#4b5563",
+            fontSize: props.fontSize || "1rem",
+            lineHeight: props.lineHeight || "1.6",
+            textAlign: props.textAlign || "left" as any,
+          }}
+          className="cursor-text break-words whitespace-pre-wrap"
+        >
+          {props.text || "Paragraph Text"}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const RichTextBlockPreview: React.FC<BlockPreviewProps> = ({
+  block,
+  isSelected,
+  onSelect,
+  onUpdate,
+}) => {
+  const props = block.properties;
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editText, setEditText] = React.useState(props.text || "");
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const handleSave = () => {
+    if (editText.trim()) {
+      onUpdate({ ...props, text: editText });
+    }
+    setIsEditing(false);
+  };
+
+  const adjustHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  return (
+    <div
+      onClick={onSelect}
+      className={`cursor-pointer transition-all border ${
+        isSelected ? "border-valasys-orange" : "border-gray-200"
+      }`}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        padding: props.padding || "20px",
+      }}
+    >
+      {isEditing ? (
+        <textarea
+          ref={textareaRef}
+          value={editText}
+          onChange={(e) => {
+            setEditText(e.target.value);
+            adjustHeight();
+          }}
+          onBlur={handleSave}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setEditText(props.text || "");
+              setIsEditing(false);
+            }
+          }}
+          className="w-full focus:outline-none bg-transparent resize-none overflow-hidden whitespace-pre-wrap break-words font-mono text-xs"
+          style={{
+            color: props.textColor || "#4b5563",
+            fontSize: props.fontSize || "1rem",
+            lineHeight: props.lineHeight || "1.6",
+          }}
+          autoFocus
+        />
+      ) : (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditText(props.text || "");
+            setIsEditing(true);
+          }}
+          style={{
+            color: props.textColor || "#4b5563",
+            fontSize: props.fontSize || "1rem",
+            lineHeight: props.lineHeight || "1.6",
+          }}
+          className="cursor-text break-words"
+          dangerouslySetInnerHTML={{ __html: props.text || "<p>Rich text content</p>" }}
+        />
+      )}
+    </div>
+  );
+};
+
+export const QuoteBlockPreview: React.FC<BlockPreviewProps> = ({
+  block,
+  isSelected,
+  onSelect,
+  onUpdate,
+}) => {
+  const props = block.properties;
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editQuote, setEditQuote] = React.useState(props.quoteText || "");
+  const [editAuthor, setEditAuthor] = React.useState(props.authorName || "");
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const handleSave = () => {
+    if (editQuote.trim()) {
+      onUpdate({ ...props, quoteText: editQuote, authorName: editAuthor });
+    }
+    setIsEditing(false);
+  };
+
+  const borderStyle: React.CSSProperties = {
+    borderLeft:
+      props.borderPosition === "left"
+        ? `${props.borderWidth || "4px"} solid ${props.borderColor || "#FF6A00"}`
+        : undefined,
+    borderTop:
+      props.borderPosition === "top"
+        ? `${props.borderWidth || "4px"} solid ${props.borderColor || "#FF6A00"}`
+        : undefined,
+    borderRight:
+      props.borderPosition === "right"
+        ? `${props.borderWidth || "4px"} solid ${props.borderColor || "#FF6A00"}`
+        : undefined,
+    borderBottom:
+      props.borderPosition === "bottom"
+        ? `${props.borderWidth || "4px"} solid ${props.borderColor || "#FF6A00"}`
+        : undefined,
+  };
+
+  return (
+    <div
+      onClick={onSelect}
+      className={`cursor-pointer transition-all border ${
+        isSelected ? "border-valasys-orange" : "border-gray-200"
+      }`}
+      style={{
+        backgroundColor: props.backgroundColor || "#f3f4f6",
+        padding: props.padding || "24px",
+        ...borderStyle,
+      }}
+    >
+      {isEditing ? (
+        <div className="space-y-3">
+          <textarea
+            ref={textareaRef}
+            value={editQuote}
+            onChange={(e) => setEditQuote(e.target.value)}
+            onBlur={handleSave}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setEditQuote(props.quoteText || "");
+                setEditAuthor(props.authorName || "");
+                setIsEditing(false);
+              }
+            }}
+            className="w-full focus:outline-none bg-transparent resize-none overflow-hidden whitespace-pre-wrap break-words italic"
+            style={{
+              color: props.textColor || "#1f2937",
+              fontSize: props.quoteSize || "1.5rem",
+            }}
+            placeholder="Quote text"
+            autoFocus
+          />
+          <input
+            type="text"
+            value={editAuthor}
+            onChange={(e) => setEditAuthor(e.target.value)}
+            onBlur={handleSave}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSave();
+              if (e.key === "Escape") {
+                setEditQuote(props.quoteText || "");
+                setEditAuthor(props.authorName || "");
+                setIsEditing(false);
+              }
+            }}
+            className="w-full focus:outline-none bg-transparent text-sm"
+            style={{
+              color: props.textColor || "#1f2937",
+              fontSize: props.authorSize || "0.875rem",
+            }}
+            placeholder="Author name"
+          />
+        </div>
+      ) : (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditQuote(props.quoteText || "");
+            setEditAuthor(props.authorName || "");
+            setIsEditing(true);
+          }}
+          className="cursor-text"
+        >
+          <blockquote
+            style={{
+              color: props.textColor || "#1f2937",
+              fontSize: props.quoteSize || "1.5rem",
+              marginBottom: "0.5rem",
+            }}
+            className="italic break-words whitespace-pre-wrap"
+          >
+            "{props.quoteText}"
+          </blockquote>
+          <p
+            style={{
+              color: props.textColor || "#1f2937",
+              fontSize: props.authorSize || "0.875rem",
+            }}
+          >
+            — {props.authorName}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
