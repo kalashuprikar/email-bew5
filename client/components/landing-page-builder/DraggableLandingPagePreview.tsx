@@ -257,14 +257,12 @@ const DragItem: React.FC<{
     <div
       ref={ref}
       data-handler-id={handlerId}
-      className={`relative transition-all rounded cursor-pointer group mb-8 ${
+      className={`relative transition-all rounded cursor-pointer group mb-8 border-2 ${
         isDragging ? "opacity-50" : ""
       } ${
         isSelected
-          ? "border-2 border-solid border-valasys-orange shadow-lg shadow-orange-200"
-          : isHovered
-            ? "border-2 border-dotted border-valasys-orange"
-            : "border-2 border-transparent"
+          ? "border-solid border-valasys-orange shadow-lg shadow-orange-200"
+          : "border-transparent hover:border-dotted hover:border-valasys-orange"
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
