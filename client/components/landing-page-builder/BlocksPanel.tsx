@@ -32,7 +32,6 @@ import {
   createParagraphBlock,
   createRichTextBlock,
   createQuoteBlock,
-  createTextHeadingsBlock,
 } from "./utils";
 import { LandingPageBlock } from "./types";
 
@@ -109,12 +108,6 @@ export const BlocksPanel: React.FC<BlocksPanelProps> = ({
           icon: <Layout className="w-6 h-6" />,
           label: "Header",
           onCreate: createHeaderBlock,
-        },
-        {
-          id: "text-headings",
-          icon: <Type className="w-6 h-6" />,
-          label: "Text & Headings",
-          onCreate: createTextHeadingsBlock,
         },
         {
           id: "hero",

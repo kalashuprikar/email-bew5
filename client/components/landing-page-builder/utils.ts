@@ -364,43 +364,6 @@ export const createQuoteBlock = (): LandingPageBlock => ({
   },
 });
 
-export const createTextHeadingsBlock = (): LandingPageBlock => ({
-  id: `text-headings-${Date.now()}`,
-  type: "text-headings-composite",
-  properties: {
-    elements: [
-      {
-        id: `heading-${Date.now()}-1`,
-        type: "heading",
-        text: "Section Heading",
-        level: "h2",
-        fontSize: "2rem",
-        fontWeight: "bold",
-        textColor: "#1f2937",
-        fontFamily: "Arial, sans-serif",
-        textAlign: "left",
-        marginBottom: "16px",
-      },
-      {
-        id: `paragraph-${Date.now()}-2`,
-        type: "paragraph",
-        text: "Add your paragraph text here. This block supports multiple text elements that can be easily edited inline.",
-        fontSize: "1rem",
-        textColor: "#4b5563",
-        fontFamily: "Arial, sans-serif",
-        lineHeight: "1.6",
-        textAlign: "left",
-        marginBottom: "16px",
-      },
-    ],
-    containerBackgroundColor: "#ffffff",
-    containerPadding: "24px",
-    containerMargin: "0px",
-    containerBorderRadius: "0px",
-    containerBoxShadow: "none",
-  },
-});
-
 // Template block creators that return arrays of blocks
 export const createMeetFramerTemplate = (): LandingPageBlock[] => [
   createHeroBlock(),

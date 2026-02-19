@@ -16,8 +16,7 @@ export interface LandingPageBlock {
     | "heading"
     | "paragraph"
     | "rich-text"
-    | "quote"
-    | "text-headings-composite";
+    | "quote";
   properties: Record<string, any>;
   children?: LandingPageBlock[];
 }
