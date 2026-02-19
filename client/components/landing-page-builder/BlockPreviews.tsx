@@ -120,10 +120,7 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
 
   return (
     <div
-      onClick={onSelect}
-      className={`border border-gray-200 cursor-pointer transition-all ${
-        isSelected ? "border-orange-300" : "hover:border-gray-300"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
@@ -685,10 +682,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
 
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border bg-cover bg-center relative ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all bg-cover bg-center relative"
       style={{
         backgroundColor: props.backgroundColor || "#f3f4f6",
         backgroundImage: props.backgroundImage ? `url(${props.backgroundImage})` : undefined,
@@ -882,10 +876,7 @@ export const FeaturesBlockPreview: React.FC<BlockPreviewProps> = ({
   const props = block.properties;
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
@@ -993,10 +984,7 @@ export const TestimonialsBlockPreview: React.FC<BlockPreviewProps> = ({
   const props = block.properties;
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
@@ -1035,10 +1023,7 @@ export const AboutBlockPreview: React.FC<BlockPreviewProps> = ({
   const props = block.properties;
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
@@ -1081,10 +1066,7 @@ export const ContactFormBlockPreview: React.FC<BlockPreviewProps> = ({
   const props = block.properties;
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
@@ -1147,10 +1129,7 @@ export const FooterBlockPreview: React.FC<BlockPreviewProps> = ({
 
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#1f2937",
         color: props.textColor,
@@ -1242,10 +1221,7 @@ export const PricingBlockPreview: React.FC<BlockPreviewProps> = ({
   const props = block.properties;
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
@@ -1307,10 +1283,7 @@ export const FaqBlockPreview: React.FC<BlockPreviewProps> = ({
   const props = block.properties;
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
@@ -1349,10 +1322,7 @@ export const SignupBlockPreview: React.FC<BlockPreviewProps> = ({
   const props = block.properties;
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
@@ -1392,10 +1362,7 @@ export const PricingFooterBlockPreview: React.FC<BlockPreviewProps> = ({
   const props = block.properties;
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         width: props.width || "100%",
@@ -1458,10 +1425,7 @@ export const HeadingBlockPreview: React.FC<BlockPreviewProps> = ({
 
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         padding: props.padding || "20px",
@@ -1540,10 +1504,7 @@ export const ParagraphBlockPreview: React.FC<BlockPreviewProps> = ({
 
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         padding: props.padding || "20px",
@@ -1622,10 +1583,7 @@ export const RichTextBlockPreview: React.FC<BlockPreviewProps> = ({
 
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         padding: props.padding || "20px",
@@ -1714,10 +1672,7 @@ export const QuoteBlockPreview: React.FC<BlockPreviewProps> = ({
 
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#f3f4f6",
         padding: props.padding || "24px",
@@ -1820,10 +1775,7 @@ export const DynamicContentBlockPreview: React.FC<BlockPreviewProps> = ({
 
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         borderColor: props.borderColor || "#e5e7eb",
@@ -1901,10 +1853,7 @@ export const ProductBlockPreview: React.FC<BlockPreviewProps> = ({
 
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#ffffff",
         padding: "32px 24px",
@@ -1988,10 +1937,7 @@ export const NavigationBlockPreview: React.FC<BlockPreviewProps> = ({
 
   return (
     <div
-      onClick={onSelect}
-      className={`cursor-pointer transition-all border ${
-        isSelected ? "border-valasys-orange" : "border-gray-200"
-      }`}
+      className="transition-all"
       style={{
         backgroundColor: props.backgroundColor || "#1f2937",
         color: props.textColor || "#ffffff",
