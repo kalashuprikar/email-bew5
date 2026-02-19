@@ -35,6 +35,7 @@ import {
   createDynamicContentBlock,
   createProductBlock,
   createNavigationBlock,
+  createContentImageBlock,
 } from "./utils";
 import { LandingPageBlock } from "./types";
 
@@ -123,6 +124,12 @@ export const BlocksPanel: React.FC<BlocksPanelProps> = ({
           icon: <Layout className="w-6 h-6" />,
           label: "Navigation",
           onCreate: createNavigationBlock,
+        },
+        {
+          id: "content-image",
+          icon: <Image className="w-6 h-6" />,
+          label: "Content + Image",
+          onCreate: createContentImageBlock,
         },
       ],
     },

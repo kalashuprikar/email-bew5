@@ -19,7 +19,8 @@ export interface LandingPageBlock {
     | "quote"
     | "dynamic-content"
     | "product"
-    | "navigation";
+    | "navigation"
+    | "content-image";
   properties: Record<string, any>;
   children?: LandingPageBlock[];
 }

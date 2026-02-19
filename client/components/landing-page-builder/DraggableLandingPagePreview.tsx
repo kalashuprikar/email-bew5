@@ -29,6 +29,7 @@ import {
   DynamicContentBlockPreview,
   ProductBlockPreview,
   NavigationBlockPreview,
+  ContentImageBlockPreview,
 } from "./BlockPreviews";
 import {
   createHeaderBlock,
@@ -50,6 +51,7 @@ import {
   createDynamicContentBlock,
   createProductBlock,
   createNavigationBlock,
+  createContentImageBlock,
 } from "./utils";
 
 interface DraggableLandingPagePreviewProps {
@@ -87,6 +89,7 @@ const BLOCK_CREATORS = {
   "dynamic-content": createDynamicContentBlock,
   product: createProductBlock,
   navigation: createNavigationBlock,
+  "content-image": createContentImageBlock,
 };
 
 const DragItem: React.FC<{
@@ -231,6 +234,9 @@ const DragItem: React.FC<{
       break;
     case "navigation":
       blockContent = <NavigationBlockPreview {...blockProps} />;
+      break;
+    case "content-image":
+      blockContent = <ContentImageBlockPreview {...blockProps} />;
       break;
     default:
       blockContent = <div>Unknown block type</div>;

@@ -1869,3 +1869,74 @@ export const NavigationBlockPreview: React.FC<BlockPreviewProps> = ({
     </div>
   );
 };
+
+export const ContentImageBlockPreview: React.FC<BlockPreviewProps> = ({
+  block,
+  isSelected,
+  onSelect,
+  onUpdate,
+}) => {
+  const props = block.properties;
+
+  return (
+    <div
+      onClick={onSelect}
+      className={`border cursor-pointer transition-all ${
+        isSelected ? "border-valasys-orange border-2" : "border-gray-200"
+      }`}
+      style={{ backgroundColor: props.backgroundColor || "#ffffff" }}
+    >
+      <div className="p-6">
+        <div className={`flex gap-6 items-center ${
+          props.imagePosition === "right" ? "flex-row-reverse" : "flex-row"
+        }`}>
+          {/* Image */}
+          <div className="flex-shrink-0">
+            {props.imageUrl && (
+              <img
+                src={props.imageUrl}
+                alt="Product"
+                className="w-48 h-40 object-cover rounded border-2 border-orange-300"
+              />
+            )}
+            {!props.imageUrl && (
+              <div className="w-48 h-40 bg-gray-200 rounded border-2 border-dashed border-gray-300 flex items-center justify-center">
+                <span className="text-gray-400 text-sm">No image</span>
+              </div>
+            )}
+          </div>
+
+          {/* Content */}
+          <div className="flex-1">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              {props.title || "Some title here"}
+            </h3>
+            <p className="text-gray-600 text-sm mb-4 whitespace-pre-wrap">
+              {props.description || "Your description here"}
+            </p>
+            <button
+              className="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded text-sm"
+              style={{ backgroundColor: props.buttonColor || "#FF6A00" }}
+            >
+              {props.buttonText || "Call to action"}
+            </button>
+          </div>
+        </div>
+
+        {/* Swap Position Button */}
+        <div className="mt-4 flex justify-center">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              const newPosition = props.imagePosition === "left" ? "right" : "left";
+              onUpdate({ ...props, imagePosition: newPosition });
+            }}
+            className="text-xs text-gray-600 hover:text-gray-900 underline"
+          >
+            Swap Image Position
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

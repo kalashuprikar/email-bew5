@@ -110,6 +110,20 @@ export const createTestimonialsBlock = (): LandingPageBlock => ({
   },
 });
 
+export const createContentImageBlock = (): LandingPageBlock => ({
+  id: `content-image-${Date.now()}`,
+  type: "content-image",
+  properties: {
+    title: "Some title here",
+    description: "From 25€\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy eirmod tempor incididunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+    imageUrl: "https://via.placeholder.com/300x250?text=Product+Image",
+    buttonText: "Call to action",
+    buttonLink: "#",
+    imagePosition: "left", // "left" or "right"
+    backgroundColor: "#ffffff",
+  },
+});
+
 export const createAboutBlock = (): LandingPageBlock => ({
   id: `about-${Date.now()}`,
   type: "about",
