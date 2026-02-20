@@ -2235,11 +2235,11 @@ export const ContentImageBlockPreview: React.FC<BlockPreviewProps> = ({
               <img
                 src={props.imageUrl}
                 alt="Product"
-                className="w-48 h-40 object-cover rounded border-2 border-orange-300"
+                className="w-48 h-40 object-cover rounded"
               />
             )}
             {!props.imageUrl && (
-              <div className="w-48 h-40 bg-gray-200 rounded border-2 border-dotted border-gray-300 flex items-center justify-center">
+              <div className="w-48 h-40 bg-gray-200 rounded flex items-center justify-center">
                 <span className="text-gray-400 text-sm">No image</span>
               </div>
             )}
