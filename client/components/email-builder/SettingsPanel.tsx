@@ -112,10 +112,27 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       setPaddingLeft(value);
       onBlockUpdate({ ...block, padding: value });
     } else if (side) {
-      if (side === "top") setPaddingTop(value);
-      if (side === "right") setPaddingRight(value);
-      if (side === "bottom") setPaddingBottom(value);
-      if (side === "left") setPaddingLeft(value);
+      // Update local state
+      const sideStateMap = {
+        top: () => setPaddingTop(value),
+        right: () => setPaddingRight(value),
+        bottom: () => setPaddingBottom(value),
+        left: () => setPaddingLeft(value),
+      };
+      sideStateMap[side]();
+
+      // Persist the per-side value to the block
+      const sidePropertyMap = {
+        top: "paddingTop",
+        right: "paddingRight",
+        bottom: "paddingBottom",
+        left: "paddingLeft",
+      };
+      const updatedBlock = {
+        ...block,
+        [sidePropertyMap[side]]: value,
+      };
+      onBlockUpdate(updatedBlock);
     }
   };
 
@@ -131,10 +148,27 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       setMarginLeft(value);
       onBlockUpdate({ ...block, margin: value });
     } else if (side) {
-      if (side === "top") setMarginTop(value);
-      if (side === "right") setMarginRight(value);
-      if (side === "bottom") setMarginBottom(value);
-      if (side === "left") setMarginLeft(value);
+      // Update local state
+      const sideStateMap = {
+        top: () => setMarginTop(value),
+        right: () => setMarginRight(value),
+        bottom: () => setMarginBottom(value),
+        left: () => setMarginLeft(value),
+      };
+      sideStateMap[side]();
+
+      // Persist the per-side value to the block
+      const sidePropertyMap = {
+        top: "marginTop",
+        right: "marginRight",
+        bottom: "marginBottom",
+        left: "marginLeft",
+      };
+      const updatedBlock = {
+        ...block,
+        [sidePropertyMap[side]]: value,
+      };
+      onBlockUpdate(updatedBlock);
     }
   };
 
