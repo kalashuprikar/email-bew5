@@ -129,13 +129,18 @@ export const EmailPreview: React.FC<EmailPreviewProps> = ({ template }) => {
       </div>
 
       {/* Preview Area */}
-      <div className="flex-1 overflow-auto p-8 flex items-start justify-center bg-gray-100">
+      <div
+        className="flex-1 overflow-auto p-8 flex items-start justify-center"
+        style={{
+          backgroundColor: template.documentBackgroundColor || "#ffffff",
+        }}
+      >
         <div
           style={{
             width: getDeviceWidth(),
             backgroundColor: template.backgroundColor,
             padding: `${template.padding}px`,
-            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            border: "1px solid #ddd",
             borderRadius: "4px",
           }}
         >
