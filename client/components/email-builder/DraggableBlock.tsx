@@ -12,10 +12,12 @@ interface DraggableBlockProps {
   index: number;
   totalBlocks: number;
   isSelected: boolean;
+  selectedSubElementId?: string | null;
   isEditing?: boolean;
   selectedFooterElement?: string | null;
   onBlockUpdate: (block: ContentBlock) => void;
   onBlockSelect: (id: string) => void;
+  onSubElementSelect?: (id: string | null) => void;
   onEditingBlockChange?: (id: string | null) => void;
   onFooterElementSelect?: (element: string | null) => void;
   onMoveBlock: (dragIndex: number, hoverIndex: number) => void;
@@ -30,10 +32,12 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   index,
   totalBlocks,
   isSelected,
+  selectedSubElementId,
   isEditing,
   selectedFooterElement,
   onBlockUpdate,
   onBlockSelect,
+  onSubElementSelect,
   onEditingBlockChange,
   onFooterElementSelect,
   onMoveBlock,
@@ -109,10 +113,12 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       <BlockRenderer
         block={block}
         isSelected={isSelected}
+        selectedSubElementId={selectedSubElementId}
         isEditing={isEditing}
         selectedFooterElement={selectedFooterElement}
         onBlockUpdate={onBlockUpdate}
         onBlockSelect={onBlockSelect}
+        onSubElementSelect={onSubElementSelect}
         onEditingBlockChange={onEditingBlockChange}
         onFooterElementSelect={onFooterElementSelect}
         onAddBlock={onAddBlock}

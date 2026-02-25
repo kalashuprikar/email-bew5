@@ -11,11 +11,13 @@ interface EmailCanvasProps {
   template: EmailTemplate;
   templateSubject: string;
   selectedBlockId: string | null;
+  selectedSubElementId: string | null;
   editingBlockId: string | null;
   selectedFooterElement?: string | null;
   onAddBlock: (block: ContentBlock, position?: number) => void;
   onBlockUpdate: (block: ContentBlock) => void;
   onBlockSelect: (id: string) => void;
+  onSubElementSelect: (id: string | null) => void;
   onEditingBlockChange: (id: string | null) => void;
   onFooterElementSelect?: (element: string | null) => void;
   onTemplateSubjectChange: (subject: string) => void;
@@ -30,11 +32,13 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
   template,
   templateSubject,
   selectedBlockId,
+  selectedSubElementId,
   editingBlockId,
   selectedFooterElement,
   onAddBlock,
   onBlockUpdate,
   onBlockSelect,
+  onSubElementSelect,
   onEditingBlockChange,
   onFooterElementSelect,
   onTemplateSubjectChange,
@@ -285,12 +289,14 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
                                 totalBlocks={template.blocks.length}
                                 isSelected={selectedBlockId === inlineBlock.id}
                                 isEditing={editingBlockId === inlineBlock.id}
+                                selectedSubElementId={selectedSubElementId}
                                 selectedFooterElement={selectedFooterElement}
                                 onBlockUpdate={onBlockUpdate}
                                 onBlockSelect={(id) => {
                                   onBlockSelect(id);
                                   setSelectedInlineGroup(null);
                                 }}
+                                onSubElementSelect={onSubElementSelect}
                                 onEditingBlockChange={onEditingBlockChange}
                                 onFooterElementSelect={onFooterElementSelect}
                                 onMoveBlock={onMoveBlock}
@@ -383,9 +389,11 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
                         totalBlocks={template.blocks.length}
                         isSelected={selectedBlockId === block.id}
                         isEditing={editingBlockId === block.id}
+                        selectedSubElementId={selectedSubElementId}
                         selectedFooterElement={selectedFooterElement}
                         onBlockUpdate={onBlockUpdate}
                         onBlockSelect={onBlockSelect}
+                        onSubElementSelect={onSubElementSelect}
                         onEditingBlockChange={onEditingBlockChange}
                         onFooterElementSelect={onFooterElementSelect}
                         onMoveBlock={onMoveBlock}

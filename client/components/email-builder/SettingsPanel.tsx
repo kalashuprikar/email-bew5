@@ -4,15 +4,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2, X, Copy, Plus } from "lucide-react";
+import { Trash2, X, Copy, Plus, ChevronLeft } from "lucide-react";
 import { SocialLinksEditor } from "./SocialLinksEditor";
 import { FooterSocialLinksEditor } from "./FooterSocialLinksEditor";
 import { generateId } from "./utils";
+import { SpacingSettings } from "./SpacingSettings";
 
 interface SettingsPanelProps {
   block: ContentBlock | null;
   onBlockUpdate: (block: ContentBlock) => void;
   onBlockDelete: () => void;
+  selectedSubElementId?: string | null;
+  onSubElementSelect?: (id: string | null) => void;
   selectedFooterElement?: string | null;
   onFooterElementSelect?: (element: string | null) => void;
 }
@@ -21,6 +24,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   block,
   onBlockUpdate,
   onBlockDelete,
+  selectedSubElementId,
+  onSubElementSelect,
   selectedFooterElement,
   onFooterElementSelect,
 }) => {
@@ -6936,13 +6941,27 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         );
       }
       case "centeredImageCard":
-      case "splitImageCard":
-        return (
-          <div className="space-y-5">
-            {/* Image Section */}
-            <div>
-              <h4 className="text-xs font-bold text-gray-900 mb-3">Image</h4>
-              <div className="space-y-3">
+      case "splitImageCard": {
+        const cardBlock = block as any;
+
+        if (selectedSubElementId === "image") {
+          return (
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onSubElementSelect?.(null)}
+                  className="h-8 w-8 p-0 hover:bg-gray-100 rounded-full"
+                >
+                  <ChevronLeft className="w-4 h-4 text-gray-600" />
+                </Button>
+                <h4 className="text-sm font-bold text-gray-900">
+                  Image Settings
+                </h4>
+              </div>
+
+              <div className="space-y-5">
                 <div>
                   <Label className="text-xs text-gray-700 mb-1 block">
                     Upload Image
@@ -6985,7 +7004,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   <Input
                     type="text"
                     placeholder="https://example.com/image.jpg"
-                    value={(block as any).image || ""}
+                    value={cardBlock.image || ""}
                     onChange={(e) =>
                       onBlockUpdate({
                         ...block,
@@ -6996,7 +7015,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   />
                 </div>
 
-                {(block as any).image && (
+                {cardBlock.image && (
                   <div>
                     <Label className="text-xs text-gray-700 mb-1 block">
                       Image Alt Text
@@ -7004,7 +7023,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     <Input
                       type="text"
                       placeholder="Describe the image..."
-                      value={(block as any).imageAlt || ""}
+                      value={cardBlock.imageAlt || ""}
                       onChange={(e) =>
                         onBlockUpdate({
                           ...block,
@@ -7015,20 +7034,78 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     />
                   </div>
                 )}
+
+                <div className="pt-4 border-t border-gray-100">
+                  <SpacingSettings
+                    label="Padding"
+                    values={{
+                      top: cardBlock.imagePaddingTop ?? cardBlock.imagePadding ?? 0,
+                      right: cardBlock.imagePaddingRight ?? cardBlock.imagePadding ?? 0,
+                      bottom: cardBlock.imagePaddingBottom ?? cardBlock.imagePadding ?? 0,
+                      left: cardBlock.imagePaddingLeft ?? cardBlock.imagePadding ?? 0,
+                    }}
+                    onChange={(v) =>
+                      onBlockUpdate({
+                        ...cardBlock,
+                        imagePaddingTop: v.top,
+                        imagePaddingRight: v.right,
+                        imagePaddingBottom: v.bottom,
+                        imagePaddingLeft: v.left,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="pt-2">
+                  <SpacingSettings
+                    label="Margin"
+                    values={{
+                      top: cardBlock.imageMarginTop ?? cardBlock.imageMargin ?? 0,
+                      right: cardBlock.imageMarginRight ?? cardBlock.imageMargin ?? 0,
+                      bottom: cardBlock.imageMarginBottom ?? cardBlock.imageMargin ?? 0,
+                      left: cardBlock.imageMarginLeft ?? cardBlock.imageMargin ?? 0,
+                    }}
+                    onChange={(v) =>
+                      onBlockUpdate({
+                        ...cardBlock,
+                        imageMarginTop: v.top,
+                        imageMarginRight: v.right,
+                        imageMarginBottom: v.bottom,
+                        imageMarginLeft: v.left,
+                      })
+                    }
+                  />
+                </div>
               </div>
             </div>
+          );
+        }
 
-            {/* Content Section */}
-            <div>
-              <h4 className="text-xs font-bold text-gray-900 mb-3">Content</h4>
-              <div className="space-y-3">
+        if (selectedSubElementId === "title") {
+          return (
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onSubElementSelect?.(null)}
+                  className="h-8 w-8 p-0 hover:bg-gray-100 rounded-full"
+                >
+                  <ChevronLeft className="w-4 h-4 text-gray-600" />
+                </Button>
+                <h4 className="text-sm font-bold text-gray-900">
+                  Title Settings
+                </h4>
+              </div>
+
+              <div className="space-y-5">
                 <div>
                   <Label className="text-xs text-gray-700 mb-1 block">
-                    Title
+                    Title Text
                   </Label>
                   <Input
                     type="text"
-                    value={(block as any).title || ""}
+                    value={cardBlock.title || ""}
                     onChange={(e) =>
                       onBlockUpdate({
                         ...block,
@@ -7039,12 +7116,76 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   />
                 </div>
 
+                <div className="pt-4 border-t border-gray-100">
+                  <SpacingSettings
+                    label="Padding"
+                    values={{
+                      top: cardBlock.titlePaddingTop ?? cardBlock.titlePadding ?? 0,
+                      right: cardBlock.titlePaddingRight ?? cardBlock.titlePadding ?? 0,
+                      bottom: cardBlock.titlePaddingBottom ?? cardBlock.titlePadding ?? 0,
+                      left: cardBlock.titlePaddingLeft ?? cardBlock.titlePadding ?? 0,
+                    }}
+                    onChange={(v) =>
+                      onBlockUpdate({
+                        ...cardBlock,
+                        titlePaddingTop: v.top,
+                        titlePaddingRight: v.right,
+                        titlePaddingBottom: v.bottom,
+                        titlePaddingLeft: v.left,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="pt-2">
+                  <SpacingSettings
+                    label="Margin"
+                    values={{
+                      top: cardBlock.titleMarginTop ?? cardBlock.titleMargin ?? 0,
+                      right: cardBlock.titleMarginRight ?? cardBlock.titleMargin ?? 0,
+                      bottom: cardBlock.titleMarginBottom ?? cardBlock.titleMargin ?? 0,
+                      left: cardBlock.titleMarginLeft ?? cardBlock.titleMargin ?? 0,
+                    }}
+                    onChange={(v) =>
+                      onBlockUpdate({
+                        ...cardBlock,
+                        titleMarginTop: v.top,
+                        titleMarginRight: v.right,
+                        titleMarginBottom: v.bottom,
+                        titleMarginLeft: v.left,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        if (selectedSubElementId === "description") {
+          return (
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onSubElementSelect?.(null)}
+                  className="h-8 w-8 p-0 hover:bg-gray-100 rounded-full"
+                >
+                  <ChevronLeft className="w-4 h-4 text-gray-600" />
+                </Button>
+                <h4 className="text-sm font-bold text-gray-900">
+                  Description Settings
+                </h4>
+              </div>
+
+              <div className="space-y-5">
                 <div>
                   <Label className="text-xs text-gray-700 mb-1 block">
-                    Description
+                    Description Text
                   </Label>
                   <textarea
-                    value={(block as any).description || ""}
+                    value={cardBlock.description || ""}
                     onChange={(e) =>
                       onBlockUpdate({
                         ...block,
@@ -7056,13 +7197,77 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   />
                 </div>
 
+                <div className="pt-4 border-t border-gray-100">
+                  <SpacingSettings
+                    label="Padding"
+                    values={{
+                      top: cardBlock.descriptionPaddingTop ?? cardBlock.descriptionPadding ?? 0,
+                      right: cardBlock.descriptionPaddingRight ?? cardBlock.descriptionPadding ?? 0,
+                      bottom: cardBlock.descriptionPaddingBottom ?? cardBlock.descriptionPadding ?? 0,
+                      left: cardBlock.descriptionPaddingLeft ?? cardBlock.descriptionPadding ?? 0,
+                    }}
+                    onChange={(v) =>
+                      onBlockUpdate({
+                        ...cardBlock,
+                        descriptionPaddingTop: v.top,
+                        descriptionPaddingRight: v.right,
+                        descriptionPaddingBottom: v.bottom,
+                        descriptionPaddingLeft: v.left,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="pt-2">
+                  <SpacingSettings
+                    label="Margin"
+                    values={{
+                      top: cardBlock.descriptionMarginTop ?? cardBlock.descriptionMargin ?? 0,
+                      right: cardBlock.descriptionMarginRight ?? cardBlock.descriptionMargin ?? 0,
+                      bottom: cardBlock.descriptionMarginBottom ?? cardBlock.descriptionMargin ?? 0,
+                      left: cardBlock.descriptionMarginLeft ?? cardBlock.descriptionMargin ?? 0,
+                    }}
+                    onChange={(v) =>
+                      onBlockUpdate({
+                        ...cardBlock,
+                        descriptionMarginTop: v.top,
+                        descriptionMarginRight: v.right,
+                        descriptionMarginBottom: v.bottom,
+                        descriptionMarginLeft: v.left,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        if (selectedSubElementId === "button") {
+          return (
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onSubElementSelect?.(null)}
+                  className="h-8 w-8 p-0 hover:bg-gray-100 rounded-full"
+                >
+                  <ChevronLeft className="w-4 h-4 text-gray-600" />
+                </Button>
+                <h4 className="text-sm font-bold text-gray-900">
+                  Button Settings
+                </h4>
+              </div>
+
+              <div className="space-y-5">
                 <div>
                   <Label className="text-xs text-gray-700 mb-1 block">
                     Button Text
                   </Label>
                   <Input
                     type="text"
-                    value={(block as any).buttonText || ""}
+                    value={cardBlock.buttonText || ""}
                     onChange={(e) =>
                       onBlockUpdate({
                         ...block,
@@ -7080,7 +7285,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   <Input
                     type="text"
                     placeholder="https://example.com"
-                    value={(block as any).buttonLink || ""}
+                    value={cardBlock.buttonLink || ""}
                     onChange={(e) =>
                       onBlockUpdate({
                         ...block,
@@ -7090,45 +7295,126 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     className="focus:ring-valasys-orange focus:ring-2"
                   />
                 </div>
+
+                <div className="pt-4 border-t border-gray-100">
+                  <SpacingSettings
+                    label="Padding"
+                    values={{
+                      top: cardBlock.buttonPaddingTop ?? cardBlock.buttonPadding ?? 0,
+                      right: cardBlock.buttonPaddingRight ?? cardBlock.buttonPadding ?? 0,
+                      bottom: cardBlock.buttonPaddingBottom ?? cardBlock.buttonPadding ?? 0,
+                      left: cardBlock.buttonPaddingLeft ?? cardBlock.buttonPadding ?? 0,
+                    }}
+                    onChange={(v) =>
+                      onBlockUpdate({
+                        ...cardBlock,
+                        buttonPaddingTop: v.top,
+                        buttonPaddingRight: v.right,
+                        buttonPaddingBottom: v.bottom,
+                        buttonPaddingLeft: v.left,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="pt-2">
+                  <SpacingSettings
+                    label="Margin"
+                    values={{
+                      top: cardBlock.buttonMarginTop ?? cardBlock.buttonMargin ?? 0,
+                      right: cardBlock.buttonMarginRight ?? cardBlock.buttonMargin ?? 0,
+                      bottom: cardBlock.buttonMarginBottom ?? cardBlock.buttonMargin ?? 0,
+                      left: cardBlock.buttonMarginLeft ?? cardBlock.buttonMargin ?? 0,
+                    }}
+                    onChange={(v) =>
+                      onBlockUpdate({
+                        ...cardBlock,
+                        buttonMarginTop: v.top,
+                        buttonMarginRight: v.right,
+                        buttonMarginBottom: v.bottom,
+                        buttonMarginLeft: v.left,
+                      })
+                    }
+                  />
+                </div>
               </div>
             </div>
+          );
+        }
 
-            {/* Styling Section */}
-            <div>
-              <h4 className="text-xs font-bold text-gray-900 mb-3">Styling</h4>
-              <div className="space-y-3">
-                <div>
-                  <Label className="text-xs text-gray-700 mb-1 block">
-                    Background Color
-                  </Label>
+        return (
+          <div className="space-y-6">
+            <h4 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-2">
+              Block Settings
+            </h4>
+
+            <div className="p-3 bg-blue-50 text-blue-700 text-xs rounded-md mb-2 leading-relaxed">
+              Click on an element in the card (Image, Title, Description, or
+              Button) to edit its specific styles and spacing.
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <Label className="text-xs text-gray-700 mb-1 block">
+                  Background Color
+                </Label>
+                <div className="flex gap-2">
                   <Input
                     type="color"
-                    value={(block as any).backgroundColor || "#ffffff"}
+                    value={cardBlock.backgroundColor || "#ffffff"}
                     onChange={(e) =>
                       onBlockUpdate({
                         ...block,
                         backgroundColor: e.target.value,
                       })
                     }
+                    className="w-10 h-10 p-1 flex-shrink-0"
+                  />
+                  <Input
+                    type="text"
+                    value={cardBlock.backgroundColor || "#ffffff"}
+                    onChange={(e) =>
+                      onBlockUpdate({
+                        ...block,
+                        backgroundColor: e.target.value,
+                      })
+                    }
+                    className="flex-1 focus:ring-valasys-orange focus:ring-2"
                   />
                 </div>
+              </div>
 
-                <div>
-                  <Label className="text-xs text-gray-700 mb-1 block">
-                    Border Color
-                  </Label>
+              <div>
+                <Label className="text-xs text-gray-700 mb-1 block">
+                  Border Color
+                </Label>
+                <div className="flex gap-2">
                   <Input
                     type="color"
-                    value={(block as any).borderColor || "#000000"}
+                    value={cardBlock.borderColor || "#000000"}
                     onChange={(e) =>
                       onBlockUpdate({
                         ...block,
                         borderColor: e.target.value,
                       })
                     }
+                    className="w-10 h-10 p-1 flex-shrink-0"
+                  />
+                  <Input
+                    type="text"
+                    value={cardBlock.borderColor || "#000000"}
+                    onChange={(e) =>
+                      onBlockUpdate({
+                        ...block,
+                        borderColor: e.target.value,
+                      })
+                    }
+                    className="flex-1 focus:ring-valasys-orange focus:ring-2"
                   />
                 </div>
+              </div>
 
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs text-gray-700 mb-1 block">
                     Border Width (px)
@@ -7136,7 +7422,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   <Input
                     type="number"
                     min="0"
-                    value={(block as any).borderWidth || 0}
+                    value={cardBlock.borderWidth || 0}
                     onChange={(e) =>
                       onBlockUpdate({
                         ...block,
@@ -7154,7 +7440,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   <Input
                     type="number"
                     min="0"
-                    value={(block as any).borderRadius || 0}
+                    value={cardBlock.borderRadius || 0}
                     onChange={(e) =>
                       onBlockUpdate({
                         ...block,
@@ -7164,201 +7450,49 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     className="focus:ring-valasys-orange focus:ring-2"
                   />
                 </div>
-
-                <div>
-                  <Label className="text-xs text-gray-700 mb-1 block">
-                    Padding (px)
-                  </Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    value={(block as any).padding || 0}
-                    onChange={(e) =>
-                      onBlockUpdate({
-                        ...block,
-                        padding: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="focus:ring-valasys-orange focus:ring-2"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-xs text-gray-700 mb-1 block">
-                    Margin (px)
-                  </Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    value={(block as any).margin || 0}
-                    onChange={(e) =>
-                      onBlockUpdate({
-                        ...block,
-                        margin: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="focus:ring-valasys-orange focus:ring-2"
-                  />
-                </div>
-
-                <div className="pt-3 border-t border-gray-200">
-                  <Label className="text-xs font-semibold text-gray-700 mb-3 block">
-                    Element Spacing
-                  </Label>
-                  <div className="space-y-3">
-                    {/* Image Spacing */}
-                    <div>
-                      <Label className="text-xs text-gray-600 mb-1 block">
-                        Image Padding (px)
-                      </Label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={(block as any).imagePadding || 0}
-                        onChange={(e) =>
-                          onBlockUpdate({
-                            ...block,
-                            imagePadding: parseInt(e.target.value) || 0,
-                          })
-                        }
-                        className="focus:ring-valasys-orange focus:ring-2"
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="text-xs text-gray-600 mb-1 block">
-                        Image Margin (px)
-                      </Label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={(block as any).imageMargin || 0}
-                        onChange={(e) =>
-                          onBlockUpdate({
-                            ...block,
-                            imageMargin: parseInt(e.target.value) || 0,
-                          })
-                        }
-                        className="focus:ring-valasys-orange focus:ring-2"
-                      />
-                    </div>
-
-                    {/* Title Spacing */}
-                    <div>
-                      <Label className="text-xs text-gray-600 mb-1 block">
-                        Title Padding (px)
-                      </Label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={(block as any).titlePadding || 0}
-                        onChange={(e) =>
-                          onBlockUpdate({
-                            ...block,
-                            titlePadding: parseInt(e.target.value) || 0,
-                          })
-                        }
-                        className="focus:ring-valasys-orange focus:ring-2"
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="text-xs text-gray-600 mb-1 block">
-                        Title Margin (px)
-                      </Label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={(block as any).titleMargin || 0}
-                        onChange={(e) =>
-                          onBlockUpdate({
-                            ...block,
-                            titleMargin: parseInt(e.target.value) || 0,
-                          })
-                        }
-                        className="focus:ring-valasys-orange focus:ring-2"
-                      />
-                    </div>
-
-                    {/* Description Spacing */}
-                    <div>
-                      <Label className="text-xs text-gray-600 mb-1 block">
-                        Description Padding (px)
-                      </Label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={(block as any).descriptionPadding || 0}
-                        onChange={(e) =>
-                          onBlockUpdate({
-                            ...block,
-                            descriptionPadding: parseInt(e.target.value) || 0,
-                          })
-                        }
-                        className="focus:ring-valasys-orange focus:ring-2"
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="text-xs text-gray-600 mb-1 block">
-                        Description Margin (px)
-                      </Label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={(block as any).descriptionMargin || 0}
-                        onChange={(e) =>
-                          onBlockUpdate({
-                            ...block,
-                            descriptionMargin: parseInt(e.target.value) || 0,
-                          })
-                        }
-                        className="focus:ring-valasys-orange focus:ring-2"
-                      />
-                    </div>
-
-                    {/* Button Spacing */}
-                    <div>
-                      <Label className="text-xs text-gray-600 mb-1 block">
-                        Button Padding (px)
-                      </Label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={(block as any).buttonPadding || 0}
-                        onChange={(e) =>
-                          onBlockUpdate({
-                            ...block,
-                            buttonPadding: parseInt(e.target.value) || 0,
-                          })
-                        }
-                        className="focus:ring-valasys-orange focus:ring-2"
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="text-xs text-gray-600 mb-1 block">
-                        Button Margin (px)
-                      </Label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={(block as any).buttonMargin || 0}
-                        onChange={(e) =>
-                          onBlockUpdate({
-                            ...block,
-                            buttonMargin: parseInt(e.target.value) || 0,
-                          })
-                        }
-                        className="focus:ring-valasys-orange focus:ring-2"
-                      />
-                    </div>
-                  </div>
-                </div>
               </div>
+
+              <SpacingSettings
+                label="Padding"
+                values={{
+                  top: cardBlock.paddingTop ?? cardBlock.padding ?? 0,
+                  right: cardBlock.paddingRight ?? cardBlock.padding ?? 0,
+                  bottom: cardBlock.paddingBottom ?? cardBlock.padding ?? 0,
+                  left: cardBlock.paddingLeft ?? cardBlock.padding ?? 0,
+                }}
+                onChange={(v) =>
+                  onBlockUpdate({
+                    ...cardBlock,
+                    paddingTop: v.top,
+                    paddingRight: v.right,
+                    paddingBottom: v.bottom,
+                    paddingLeft: v.left,
+                  })
+                }
+              />
+
+              <SpacingSettings
+                label="Margin"
+                values={{
+                  top: cardBlock.marginTop ?? cardBlock.margin ?? 0,
+                  right: cardBlock.marginRight ?? cardBlock.margin ?? 0,
+                  bottom: cardBlock.marginBottom ?? cardBlock.margin ?? 0,
+                  left: cardBlock.marginLeft ?? cardBlock.margin ?? 0,
+                }}
+                onChange={(v) =>
+                  onBlockUpdate({
+                    ...cardBlock,
+                    marginTop: v.top,
+                    marginRight: v.right,
+                    marginBottom: v.bottom,
+                    marginLeft: v.left,
+                  })
+                }
+              />
             </div>
           </div>
         );
+      }
       case "features": {
         const featuresBlock = block as any;
         const selectedFeature = featuresBlock.features?.find(

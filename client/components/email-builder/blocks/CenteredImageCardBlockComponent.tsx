@@ -8,7 +8,10 @@ import { Button } from "@/components/ui/button";
 interface CenteredImageCardBlockComponentProps {
   block: CenteredImageCardBlock;
   isSelected: boolean;
+  selectedSubElementId?: string | null;
   onBlockUpdate: (block: CenteredImageCardBlock) => void;
+  onSubElementSelect?: (id: string | null) => void;
+  onBlockSelect?: (id: string) => void;
   blockIndex?: number;
   onDuplicate?: (block: CenteredImageCardBlock, position: number) => void;
   onDelete?: (blockId: string) => void;
@@ -52,7 +55,17 @@ const copyToClipboard = async (text: string): Promise<boolean> => {
 
 export const CenteredImageCardBlockComponent: React.FC<
   CenteredImageCardBlockComponentProps
-> = ({ block, isSelected, onBlockUpdate, blockIndex = 0, onDuplicate, onDelete }) => {
+> = ({
+  block,
+  isSelected,
+  selectedSubElementId,
+  onBlockUpdate,
+  onSubElementSelect,
+  onBlockSelect,
+  blockIndex = 0,
+  onDuplicate,
+  onDelete,
+}) => {
   const [editMode, setEditMode] = useState<string | null>(null);
   const [isResizing, setIsResizing] = useState(false);
   const [resizeHandle, setResizeHandle] = useState<string | null>(null);
@@ -449,7 +462,7 @@ export const CenteredImageCardBlockComponent: React.FC<
         <div
           ref={imageContainerRef}
           className={`relative group mb-6 transition-all rounded-lg ${
-            editMode === "image"
+            selectedSubElementId === "image"
               ? "border-2 border-dotted border-valasys-orange"
               : isHoveringImage
                 ? "border-2 border-dotted border-gray-400"
@@ -459,11 +472,16 @@ export const CenteredImageCardBlockComponent: React.FC<
             boxSizing: "border-box",
             position: "relative",
             width: block.image ? "100%" : "auto",
-            margin: block.imageMargin ? `${block.imageMargin}px auto` : "0 auto",
-            padding: block.imagePadding ? `${block.imagePadding}px` : undefined,
+            padding: `${block.imagePaddingTop ?? block.imagePadding ?? 0}px ${block.imagePaddingRight ?? block.imagePadding ?? 0}px ${block.imagePaddingBottom ?? block.imagePadding ?? 0}px ${block.imagePaddingLeft ?? block.imagePadding ?? 0}px`,
+            margin: `${block.imageMarginTop ?? block.imageMargin ?? 0}px auto ${block.imageMarginBottom ?? block.imageMargin ?? 0}px auto`,
           }}
           onMouseEnter={() => block.image && setIsHoveringImage(true)}
           onMouseLeave={() => setIsHoveringImage(false)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onBlockSelect?.(block.id);
+            onSubElementSelect?.("image");
+          }}
         >
           {block.image ? (
             <>
@@ -608,8 +626,8 @@ export const CenteredImageCardBlockComponent: React.FC<
           {/* Titles Section */}
           {titles.filter((t) => t.content).length > 0 && (
             <div className="space-y-2" style={{
-              padding: block.titlePadding ? `${block.titlePadding}px` : undefined,
-              margin: block.titleMargin ? `${block.titleMargin}px` : undefined,
+              padding: `${block.titlePaddingTop ?? block.titlePadding ?? 0}px ${block.titlePaddingRight ?? block.titlePadding ?? 0}px ${block.titlePaddingBottom ?? block.titlePadding ?? 0}px ${block.titlePaddingLeft ?? block.titlePadding ?? 0}px`,
+              margin: `${block.titleMarginTop ?? block.titleMargin ?? 0}px auto ${block.titleMarginBottom ?? block.titleMargin ?? 0}px auto`,
             }}>
               {titles
                 .filter((t) => t.content)
@@ -645,20 +663,23 @@ export const CenteredImageCardBlockComponent: React.FC<
                         onMouseLeave={() => setHoveredSection(null)}
                       >
                         <h3
-                          onClick={() => {
-                            setEditMode(`title-${title.id}`);
-                            setFocusedSection(`title-${title.id}`);
-                          }}
-                          className="flex-1 font-bold text-xl text-gray-900 cursor-pointer transition-all p-3 rounded"
-                          style={{
-                            border:
-                              focusedSection === `title-${title.id}`
-                                ? "2px solid rgb(255, 106, 0)"
-                                : hoveredSection === `title-${title.id}`
-                                  ? "2px dotted rgb(255, 106, 0)"
-                                  : "none",
-                          }}
-                        >
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onBlockSelect?.(block.id);
+                    onSubElementSelect?.("title");
+                    setEditMode(`title-${title.id}`);
+                    setFocusedSection(`title-${title.id}`);
+                  }}
+                  className="flex-1 font-bold text-xl text-gray-900 cursor-pointer transition-all p-3 rounded"
+                  style={{
+                    border:
+                      selectedSubElementId === "title" || focusedSection === `title-${title.id}`
+                        ? "2px solid rgb(255, 106, 0)"
+                        : hoveredSection === `title-${title.id}`
+                          ? "2px dotted rgb(255, 106, 0)"
+                          : "none",
+                  }}
+                >
                           {title.content}
                         </h3>
                         {focusedSection === `title-${title.id}` && (
@@ -680,8 +701,8 @@ export const CenteredImageCardBlockComponent: React.FC<
           {/* Descriptions Section */}
           {descriptions.filter((d) => d.content).length > 0 && (
             <div className="space-y-2" style={{
-              padding: block.descriptionPadding ? `${block.descriptionPadding}px` : undefined,
-              margin: block.descriptionMargin ? `${block.descriptionMargin}px` : undefined,
+              padding: `${block.descriptionPaddingTop ?? block.descriptionPadding ?? 0}px ${block.descriptionPaddingRight ?? block.descriptionPadding ?? 0}px ${block.descriptionPaddingBottom ?? block.descriptionPadding ?? 0}px ${block.descriptionPaddingLeft ?? block.descriptionPadding ?? 0}px`,
+              margin: `${block.descriptionMarginTop ?? block.descriptionMargin ?? 0}px auto ${block.descriptionMarginBottom ?? block.descriptionMargin ?? 0}px auto`,
             }}>
               {descriptions
                 .filter((d) => d.content)
@@ -727,14 +748,17 @@ export const CenteredImageCardBlockComponent: React.FC<
                         onMouseLeave={() => setHoveredSection(null)}
                       >
                         <p
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onBlockSelect?.(block.id);
+                            onSubElementSelect?.("description");
                             setEditMode(`description-${desc.id}`);
                             setFocusedSection(`description-${desc.id}`);
                           }}
                           className="flex-1 text-sm text-gray-600 cursor-pointer transition-all p-3 rounded whitespace-pre-wrap break-words"
                           style={{
                             border:
-                              focusedSection === `description-${desc.id}`
+                              selectedSubElementId === "description" || focusedSection === `description-${desc.id}`
                                 ? "2px solid rgb(255, 106, 0)"
                                 : hoveredSection === `description-${desc.id}`
                                   ? "2px dotted rgb(255, 106, 0)"
@@ -762,8 +786,8 @@ export const CenteredImageCardBlockComponent: React.FC<
           {/* Buttons Section */}
           {buttons.filter((b) => b.text).length > 0 && (
             <div className="space-y-2 pt-2" style={{
-              padding: block.buttonPadding ? `${block.buttonPadding}px` : undefined,
-              margin: block.buttonMargin ? `${block.buttonMargin}px` : undefined,
+              padding: `${block.buttonPaddingTop ?? block.buttonPadding ?? 0}px ${block.buttonPaddingRight ?? block.buttonPadding ?? 0}px ${block.buttonPaddingBottom ?? block.buttonPadding ?? 0}px ${block.buttonPaddingLeft ?? block.buttonPadding ?? 0}px`,
+              margin: `${block.buttonMarginTop ?? block.buttonMargin ?? 0}px auto ${block.buttonMarginBottom ?? block.buttonMargin ?? 0}px auto`,
             }}>
               {buttons
                 .filter((b) => b.text)
@@ -822,14 +846,17 @@ export const CenteredImageCardBlockComponent: React.FC<
                         onMouseLeave={() => setHoveredSection(null)}
                       >
                         <button
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onBlockSelect?.(block.id);
+                            onSubElementSelect?.("button");
                             setEditMode(`button-text-${btn.id}`);
                             setFocusedSection(`button-${btn.id}`);
                           }}
                           className="inline-block py-2 px-6 bg-valasys-orange text-white rounded text-sm font-bold hover:bg-orange-600 cursor-pointer transition-all"
                           style={{
                             border:
-                              focusedSection === `button-${btn.id}`
+                              selectedSubElementId === "button" || focusedSection === `button-${btn.id}`
                                 ? "2px solid white"
                                 : hoveredSection === `button-${btn.id}`
                                   ? "2px dotted white"

@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button";
 interface SplitImageCardBlockComponentProps {
   block: SplitImageCardBlock;
   isSelected: boolean;
+  selectedSubElementId?: string | null;
   onBlockUpdate: (block: SplitImageCardBlock) => void;
+  onSubElementSelect?: (id: string | null) => void;
+  onBlockSelect?: (id: string) => void;
   blockIndex?: number;
   onDuplicate?: (block: SplitImageCardBlock, position: number) => void;
   onDelete?: (blockId: string) => void;
@@ -51,7 +54,17 @@ const copyToClipboard = async (text: string): Promise<boolean> => {
 
 export const SplitImageCardBlockComponent: React.FC<
   SplitImageCardBlockComponentProps
-> = ({ block, isSelected, onBlockUpdate, blockIndex = 0, onDuplicate, onDelete }) => {
+> = ({
+  block,
+  isSelected,
+  selectedSubElementId,
+  onBlockUpdate,
+  onSubElementSelect,
+  onBlockSelect,
+  blockIndex = 0,
+  onDuplicate,
+  onDelete,
+}) => {
   const [editMode, setEditMode] = useState<string | null>(null);
   const [isHoveringImage, setIsHoveringImage] = useState(false);
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
@@ -456,13 +469,20 @@ export const SplitImageCardBlockComponent: React.FC<
         <div className="flex flex-col md:flex-row gap-4 items-stretch">
           {isImageLeft && (
             <div
-              className="md:w-2/5"
+              className={`md:w-2/5 rounded transition-all ${
+                selectedSubElementId === "image" ? "ring-2 ring-valasys-orange ring-offset-2" : ""
+              }`}
               ref={imageContainerRef}
               onMouseEnter={() => block.image && setIsHoveringImage(true)}
               onMouseLeave={() => setIsHoveringImage(false)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onBlockSelect?.(block.id);
+                onSubElementSelect?.("image");
+              }}
               style={{
-                padding: block.imagePadding ? `${block.imagePadding}px` : undefined,
-                margin: block.imageMargin ? `${block.imageMargin}px` : undefined,
+                padding: `${block.imagePaddingTop ?? block.imagePadding ?? 0}px ${block.imagePaddingRight ?? block.imagePadding ?? 0}px ${block.imagePaddingBottom ?? block.imagePadding ?? 0}px ${block.imagePaddingLeft ?? block.imagePadding ?? 0}px`,
+                margin: `${block.imageMarginTop ?? block.imageMargin ?? 0}px auto ${block.imageMarginBottom ?? block.imageMargin ?? 0}px auto`,
               }}
             >
               {block.image ? (
@@ -592,8 +612,8 @@ export const SplitImageCardBlockComponent: React.FC<
               {/* Titles Section */}
               {titles.filter((t) => t.content).length > 0 && (
                 <div className="space-y-2" style={{
-                  padding: block.titlePadding ? `${block.titlePadding}px` : undefined,
-                  margin: block.titleMargin ? `${block.titleMargin}px` : undefined,
+                  padding: `${block.titlePaddingTop ?? block.titlePadding ?? 0}px ${block.titlePaddingRight ?? block.titlePadding ?? 0}px ${block.titlePaddingBottom ?? block.titlePadding ?? 0}px ${block.titlePaddingLeft ?? block.titlePadding ?? 0}px`,
+                  margin: `${block.titleMarginTop ?? block.titleMargin ?? 0}px auto ${block.titleMarginBottom ?? block.titleMargin ?? 0}px auto`,
                 }}>
                   {titles
                     .filter((t) => t.content)
@@ -629,14 +649,17 @@ export const SplitImageCardBlockComponent: React.FC<
                             onMouseLeave={() => setHoveredSection(null)}
                           >
                             <p
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onBlockSelect?.(block.id);
+                                onSubElementSelect?.("title");
                                 setEditMode(`title-${title.id}`);
                                 setFocusedSection(`title-${title.id}`);
                               }}
                               className="font-bold text-lg text-gray-900 cursor-pointer p-3 rounded transition-all"
                               style={{
                                 border:
-                                  focusedSection === `title-${title.id}`
+                                  selectedSubElementId === "title" || focusedSection === `title-${title.id}`
                                     ? "2px solid rgb(255, 106, 0)"
                                     : hoveredSection === `title-${title.id}`
                                       ? "2px dotted rgb(255, 106, 0)"
@@ -664,8 +687,8 @@ export const SplitImageCardBlockComponent: React.FC<
               {/* Descriptions Section */}
               {descriptions.filter((d) => d.content).length > 0 && (
                 <div className="space-y-2" style={{
-                  padding: block.descriptionPadding ? `${block.descriptionPadding}px` : undefined,
-                  margin: block.descriptionMargin ? `${block.descriptionMargin}px` : undefined,
+                  padding: `${block.descriptionPaddingTop ?? block.descriptionPadding ?? 0}px ${block.descriptionPaddingRight ?? block.descriptionPadding ?? 0}px ${block.descriptionPaddingBottom ?? block.descriptionPadding ?? 0}px ${block.descriptionPaddingLeft ?? block.descriptionPadding ?? 0}px`,
+                  margin: `${block.descriptionMarginTop ?? block.descriptionMargin ?? 0}px auto ${block.descriptionMarginBottom ?? block.descriptionMargin ?? 0}px auto`,
                 }}>
                   {descriptions
                     .filter((d) => d.content)
@@ -711,14 +734,17 @@ export const SplitImageCardBlockComponent: React.FC<
                             onMouseLeave={() => setHoveredSection(null)}
                           >
                             <p
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onBlockSelect?.(block.id);
+                                onSubElementSelect?.("description");
                                 setEditMode(`description-${desc.id}`);
                                 setFocusedSection(`description-${desc.id}`);
                               }}
                               className="text-sm text-gray-600 cursor-pointer p-3 rounded whitespace-pre-line transition-all"
                               style={{
                                 border:
-                                  focusedSection === `description-${desc.id}`
+                                  selectedSubElementId === "description" || focusedSection === `description-${desc.id}`
                                     ? "2px solid rgb(255, 106, 0)"
                                     : hoveredSection ===
                                         `description-${desc.id}`
@@ -747,8 +773,8 @@ export const SplitImageCardBlockComponent: React.FC<
               {/* Buttons Section */}
               {buttons.filter((b) => b.text).length > 0 && (
                 <div className="space-y-2" style={{
-                  padding: block.buttonPadding ? `${block.buttonPadding}px` : undefined,
-                  margin: block.buttonMargin ? `${block.buttonMargin}px` : undefined,
+                  padding: `${block.buttonPaddingTop ?? block.buttonPadding ?? 0}px ${block.buttonPaddingRight ?? block.buttonPadding ?? 0}px ${block.buttonPaddingBottom ?? block.buttonPadding ?? 0}px ${block.buttonPaddingLeft ?? block.buttonPadding ?? 0}px`,
+                  margin: `${block.buttonMarginTop ?? block.buttonMargin ?? 0}px auto ${block.buttonMarginBottom ?? block.buttonMargin ?? 0}px auto`,
                 }}>
                   {buttons
                     .filter((b) => b.text)
@@ -815,14 +841,17 @@ export const SplitImageCardBlockComponent: React.FC<
                             onMouseLeave={() => setHoveredSection(null)}
                           >
                             <button
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onBlockSelect?.(block.id);
+                                onSubElementSelect?.("button");
                                 setEditMode(`button-text-${btn.id}`);
                                 setFocusedSection(`button-${btn.id}`);
                               }}
                               className="py-2 px-4 bg-valasys-orange text-white rounded text-sm font-bold hover:bg-orange-600 cursor-pointer transition-all"
                               style={{
                                 border:
-                                  focusedSection === `button-${btn.id}`
+                                  selectedSubElementId === "button" || focusedSection === `button-${btn.id}`
                                     ? "2px solid white"
                                     : hoveredSection === `button-${btn.id}`
                                       ? "2px dotted white"
@@ -845,9 +874,20 @@ export const SplitImageCardBlockComponent: React.FC<
 
           {!isImageLeft && (
             <div
-              className="md:w-2/5"
+              className={`md:w-2/5 rounded transition-all ${
+                selectedSubElementId === "image" ? "ring-2 ring-valasys-orange ring-offset-2" : ""
+              }`}
               onMouseEnter={() => block.image && setIsHoveringImage(true)}
               onMouseLeave={() => setIsHoveringImage(false)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onBlockSelect?.(block.id);
+                onSubElementSelect?.("image");
+              }}
+              style={{
+                padding: `${block.imagePaddingTop ?? block.imagePadding ?? 0}px ${block.imagePaddingRight ?? block.imagePadding ?? 0}px ${block.imagePaddingBottom ?? block.imagePadding ?? 0}px ${block.imagePaddingLeft ?? block.imagePadding ?? 0}px`,
+                margin: `${block.imageMarginTop ?? block.imageMargin ?? 0}px auto ${block.imageMarginBottom ?? block.imageMargin ?? 0}px auto`,
+              }}
             >
               {block.image ? (
                 <div className="relative group">
