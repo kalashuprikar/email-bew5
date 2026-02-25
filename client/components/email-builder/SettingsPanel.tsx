@@ -391,6 +391,8 @@ interface SettingsPanelProps {
   onBlockDelete: () => void;
   selectedFooterElement?: string | null;
   onFooterElementSelect?: (element: string | null) => void;
+  selectedSubElementId?: string | null;
+  onSubElementSelect?: (id: string | null) => void;
 }
 
 export const SettingsPanel: React.FC<SettingsPanelProps> = ({
@@ -399,6 +401,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onBlockDelete,
   selectedFooterElement,
   onFooterElementSelect,
+  selectedSubElementId,
+  onSubElementSelect,
 }) => {
   const [groupPaddingSides, setGroupPaddingSides] = useState(true);
   const [groupMarginSides, setGroupMarginSides] = useState(true);
@@ -458,15 +462,36 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   React.useEffect(() => {
     if (block?.type === "twoColumnCard") {
       const twoColBlock = block as any;
+      if (selectedSubElementId) {
+        const subElementExists = twoColBlock.cards?.some((c: any) => c.id === selectedSubElementId);
+        if (subElementExists) {
+          setSelectedCardId(selectedSubElementId);
+          return;
+        }
+      }
       setSelectedCardId(twoColBlock.cards?.[0]?.id || null);
     } else if (block?.type === "stats") {
       const statsBlock = block as any;
+      if (selectedSubElementId) {
+        const subElementExists = statsBlock.stats?.some((s: any) => s.id === selectedSubElementId);
+        if (subElementExists) {
+          setSelectedStatId(selectedSubElementId);
+          return;
+        }
+      }
       setSelectedStatId(statsBlock.stats?.[0]?.id || null);
     } else if (block?.type === "features") {
       const featuresBlock = block as any;
+      if (selectedSubElementId) {
+        const subElementExists = featuresBlock.features?.some((f: any) => f.id === selectedSubElementId);
+        if (subElementExists) {
+          setSelectedFeatureId(selectedSubElementId);
+          return;
+        }
+      }
       setSelectedFeatureId(featuresBlock.features?.[0]?.id || null);
     }
-  }, [block?.id, block?.type]);
+  }, [block?.id, block?.type, selectedSubElementId]);
 
   if (!block) {
     return (
@@ -5230,7 +5255,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 {twoColBlock.cards?.map((card: any, index: number) => (
                   <button type="button"
                     key={card.id}
-                    onClick={() => setSelectedCardId(card.id)}
+                    onClick={() => {
+                      setSelectedCardId(card.id);
+                      onSubElementSelect?.(card.id);
+                    }}
                     className={`px-3 py-2 rounded text-xs font-medium transition-all ${
                       selectedCardId === card.id
                         ? "bg-valasys-orange text-white ring-2 ring-orange-300"
@@ -5933,7 +5961,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 {statsBlock.stats?.map((stat: any, index: number) => (
                   <button type="button"
                     key={stat.id}
-                    onClick={() => setSelectedStatId(stat.id)}
+                    onClick={() => {
+                      setSelectedStatId(stat.id);
+                      onSubElementSelect?.(stat.id);
+                    }}
                     className={`px-3 py-2 rounded text-xs font-medium transition-all ${
                       selectedStatId === stat.id
                         ? "bg-valasys-orange text-white ring-2 ring-orange-300"
@@ -6179,13 +6210,21 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   </Label>
                   <Input
                     type="text"
-                    value={(block as any).title || ""}
-                    onChange={(e) =>
+                    value={(block as any).titles?.[0]?.content ?? (block as any).title ?? ""}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      const update: any = { title: newValue };
+                      if ((block as any).titles && (block as any).titles.length > 0) {
+                        update.titles = [
+                          { ...(block as any).titles[0], content: newValue },
+                          ...(block as any).titles.slice(1),
+                        ];
+                      }
                       onBlockUpdate({
                         ...block,
-                        title: e.target.value,
-                      })
-                    }
+                        ...update,
+                      });
+                    }}
                     className="focus:ring-valasys-orange focus:ring-2"
                   />
                 </div>
@@ -6195,13 +6234,21 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     Description
                   </Label>
                   <textarea
-                    value={(block as any).description || ""}
-                    onChange={(e) =>
+                    value={(block as any).descriptions?.[0]?.content ?? (block as any).description ?? ""}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      const update: any = { description: newValue };
+                      if ((block as any).descriptions && (block as any).descriptions.length > 0) {
+                        update.descriptions = [
+                          { ...(block as any).descriptions[0], content: newValue },
+                          ...(block as any).descriptions.slice(1),
+                        ];
+                      }
                       onBlockUpdate({
                         ...block,
-                        description: e.target.value,
-                      })
-                    }
+                        ...update,
+                      });
+                    }}
                     rows={4}
                     className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-valasys-orange focus:border-transparent"
                   />
@@ -6348,7 +6395,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 {featuresBlock.features?.map((feature: any, index: number) => (
                   <button type="button"
                     key={feature.id}
-                    onClick={() => setSelectedFeatureId(feature.id)}
+                    onClick={() => {
+                      setSelectedFeatureId(feature.id);
+                      onSubElementSelect?.(feature.id);
+                    }}
                     className={`px-3 py-2 rounded text-xs font-medium transition-all ${
                       selectedFeatureId === feature.id
                         ? "bg-valasys-orange text-white ring-2 ring-orange-300"

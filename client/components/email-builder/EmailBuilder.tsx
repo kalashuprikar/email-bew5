@@ -58,6 +58,7 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
   });
 
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [selectedSubElementId, setSelectedSubElementId] = useState<string | null>(null);
   const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
   const [selectedFooterElement, setSelectedFooterElement] = useState<
     string | null
@@ -208,6 +209,13 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
 
   const handleBlockSelect = useCallback((id: string | null) => {
     setSelectedBlockId(id);
+    if (id === null) {
+      setSelectedSubElementId(null);
+    }
+  }, []);
+
+  const handleSubElementSelect = useCallback((id: string | null) => {
+    setSelectedSubElementId(id);
   }, []);
 
   const handleSetTemplateBlocks = useCallback((blocks: ContentBlock[]) => {
@@ -390,6 +398,7 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
                   onAddBlock={handleAddBlock}
                   onBlockUpdate={handleUpdateBlock}
                   onBlockSelect={handleBlockSelect}
+                  onSubElementSelect={handleSubElementSelect}
                   onEditingBlockChange={setEditingBlockId}
                   onFooterElementSelect={setSelectedFooterElement}
                   onTemplateSubjectChange={setTemplateSubject}
@@ -418,6 +427,8 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
                     onBlockDelete={handleDeleteBlock}
                     selectedFooterElement={selectedFooterElement}
                     onFooterElementSelect={setSelectedFooterElement}
+                    selectedSubElementId={selectedSubElementId}
+                    onSubElementSelect={handleSubElementSelect}
                   />
                 </div>
               </>

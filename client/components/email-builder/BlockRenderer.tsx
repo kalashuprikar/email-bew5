@@ -36,6 +36,7 @@ interface BlockRendererProps {
   onAddBlock?: (block: ContentBlock, position: number) => void;
   onDuplicate?: (block: ContentBlock, position: number) => void;
   onDelete?: (blockId: string) => void;
+  onSubElementSelect?: (id: string | null) => void;
   blockIndex?: number;
 }
 
@@ -51,6 +52,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
   onAddBlock,
   onDuplicate,
   onDelete,
+  onSubElementSelect,
   blockIndex = 0,
 }) => {
   const handleClick = (e: React.MouseEvent) => {
@@ -271,6 +273,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             block={block as any}
             isSelected={isSelected}
             onUpdate={(updatedBlock) => onBlockUpdate(updatedBlock)}
+            onSubElementSelect={onSubElementSelect}
             onDuplicate={onDuplicate}
             onDelete={onDelete}
             blockIndex={blockIndex}
@@ -284,6 +287,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             block={block as any}
             isSelected={isSelected}
             onUpdate={(updatedBlock) => onBlockUpdate(updatedBlock)}
+            onSubElementSelect={onSubElementSelect}
             onDuplicate={onDuplicate}
             onDelete={onDelete}
             blockIndex={blockIndex}
@@ -297,6 +301,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             block={block as any}
             isSelected={isSelected}
             onUpdate={(updatedBlock) => onBlockUpdate(updatedBlock)}
+            onSubElementSelect={onSubElementSelect}
             onDuplicate={onDuplicate}
             onDelete={onDelete}
             blockIndex={blockIndex}

@@ -9,6 +9,7 @@ interface StatsBlockComponentProps {
   block: StatsBlock;
   isSelected: boolean;
   onUpdate: (block: StatsBlock) => void;
+  onSubElementSelect?: (id: string | null) => void;
   onDuplicate?: (block: StatsBlock, position: number) => void;
   onDelete?: (blockId: string) => void;
   blockIndex?: number;
@@ -18,6 +19,7 @@ export const StatsBlockComponent: React.FC<StatsBlockComponentProps> = ({
   block,
   isSelected,
   onUpdate,
+  onSubElementSelect,
   onDuplicate,
   onDelete,
   blockIndex = 0,
@@ -216,6 +218,7 @@ export const StatsBlockComponent: React.FC<StatsBlockComponentProps> = ({
               ...borderStyle,
               position: "relative",
             }}
+            onClick={() => onSubElementSelect?.(stat.id)}
           >
             {/* Values */}
             <div className="space-y-2 mb-2">

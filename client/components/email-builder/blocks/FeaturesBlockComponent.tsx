@@ -9,6 +9,7 @@ interface FeaturesBlockComponentProps {
   block: FeaturesBlock;
   isSelected: boolean;
   onUpdate: (block: FeaturesBlock) => void;
+  onSubElementSelect?: (id: string | null) => void;
   onDuplicate?: (block: FeaturesBlock, position: number) => void;
   onDelete?: (blockId: string) => void;
   blockIndex?: number;
@@ -18,6 +19,7 @@ export const FeaturesBlockComponent: React.FC<FeaturesBlockComponentProps> = ({
   block,
   isSelected,
   onUpdate,
+  onSubElementSelect,
   onDuplicate,
   onDelete,
   blockIndex = 0,
@@ -193,6 +195,7 @@ export const FeaturesBlockComponent: React.FC<FeaturesBlockComponentProps> = ({
               padding: "0 10px",
               boxSizing: "border-box",
             }}
+            onClick={() => onSubElementSelect?.(feature.id)}
           >
             <div
               style={{

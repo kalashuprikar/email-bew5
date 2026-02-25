@@ -505,6 +505,7 @@ interface TwoColumnCardBlockComponentProps {
   block: TwoColumnCardBlock;
   isSelected: boolean;
   onUpdate: (block: TwoColumnCardBlock) => void;
+  onSubElementSelect?: (id: string | null) => void;
   onDuplicate?: (block: TwoColumnCardBlock, position: number) => void;
   onDelete?: (blockId: string) => void;
   blockIndex?: number;
@@ -512,7 +513,7 @@ interface TwoColumnCardBlockComponentProps {
 
 export const TwoColumnCardBlockComponent: React.FC<
   TwoColumnCardBlockComponentProps
-> = ({ block, isSelected, onUpdate, onDuplicate, onDelete, blockIndex = 0 }) => {
+> = ({ block, isSelected, onUpdate, onSubElementSelect, onDuplicate, onDelete, blockIndex = 0 }) => {
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
   const [hoveredFieldId, setHoveredFieldId] = useState<string | null>(null);
   const [focusedFieldId, setFocusedFieldId] = useState<string | null>(null);
@@ -692,13 +693,21 @@ export const TwoColumnCardBlockComponent: React.FC<
 
   const handleSaveEditTitle = (cardId: string, titleId: string) => {
     const updatedCards = block.cards.map((card) => {
-      if (card.id === cardId && card.titles) {
-        return {
-          ...card,
-          titles: card.titles.map((t) =>
+      if (card.id === cardId) {
+        let updatedCard = { ...card };
+        if (card.titles) {
+          updatedCard.titles = card.titles.map((t) =>
             t.id === titleId ? { ...t, content: editingValue } : t
-          ),
-        };
+          );
+          // Keep legacy title field in sync if it's the first title
+          if (updatedCard.titles.length > 0 && updatedCard.titles[0].id === titleId) {
+            updatedCard.title = editingValue;
+          }
+        } else {
+          // If titles doesn't exist, we must be editing the legacy title
+          updatedCard.title = editingValue;
+        }
+        return updatedCard;
       }
       return card;
     });
@@ -709,13 +718,21 @@ export const TwoColumnCardBlockComponent: React.FC<
 
   const handleSaveEditDescription = (cardId: string, descId: string) => {
     const updatedCards = block.cards.map((card) => {
-      if (card.id === cardId && card.descriptions) {
-        return {
-          ...card,
-          descriptions: card.descriptions.map((d) =>
+      if (card.id === cardId) {
+        let updatedCard = { ...card };
+        if (card.descriptions) {
+          updatedCard.descriptions = card.descriptions.map((d) =>
             d.id === descId ? { ...d, content: editingValue } : d
-          ),
-        };
+          );
+          // Keep legacy description field in sync if it's the first description
+          if (updatedCard.descriptions.length > 0 && updatedCard.descriptions[0].id === descId) {
+            updatedCard.description = editingValue;
+          }
+        } else {
+          // If descriptions doesn't exist, we must be editing the legacy description
+          updatedCard.description = editingValue;
+        }
+        return updatedCard;
       }
       return card;
     });
@@ -815,41 +832,42 @@ export const TwoColumnCardBlockComponent: React.FC<
     >
       <div className="flex gap-5">
         {block.cards.map((card) => (
-          <CardItem
-            key={card.id}
-            card={card}
-            block={block}
-            hoveredCardId={hoveredCardId}
-            setHoveredCardId={setHoveredCardId}
-            hoveredFieldId={hoveredFieldId}
-            setHoveredFieldId={setHoveredFieldId}
-            focusedFieldId={focusedFieldId}
-            setFocusedFieldId={setFocusedFieldId}
-            editingFieldId={editingFieldId}
-            setEditingFieldId={setEditingFieldId}
-            editingValue={editingValue}
-            setEditingValue={setEditingValue}
-            editingButtonCardId={editingButtonCardId}
-            setEditingButtonCardId={setEditingButtonCardId}
-            onUpdate={onUpdate}
-            handleImageUpload={handleImageUpload}
-            handleDeleteImage={handleDeleteImage}
-            handleDuplicateTitle={handleDuplicateTitle}
-            handleDuplicateDescription={handleDuplicateDescription}
-            handleDeleteTitle={handleDeleteTitle}
-            handleDeleteDescription={handleDeleteDescription}
-            handleStartEditingTitle={handleStartEditingTitle}
-            handleStartEditingDescription={handleStartEditingDescription}
-            handleSaveEditTitle={handleSaveEditTitle}
-            handleSaveEditDescription={handleSaveEditDescription}
-            handleAddButton={handleAddButton}
-            handleOpenButtonEditor={handleOpenButtonEditor}
-            handleUpdateButton={handleUpdateButton}
-            handleDeleteButton={handleDeleteButton}
-            handleAddBlockToCard={handleAddBlockToCard}
-            handleDeleteBlockFromCard={handleDeleteBlockFromCard}
-            handleUpdateBlockInCard={handleUpdateBlockInCard}
-          />
+          <div key={card.id} className="flex-1 flex" onClick={() => onSubElementSelect?.(card.id)}>
+            <CardItem
+              card={card}
+              block={block}
+              hoveredCardId={hoveredCardId}
+              setHoveredCardId={setHoveredCardId}
+              hoveredFieldId={hoveredFieldId}
+              setHoveredFieldId={setHoveredFieldId}
+              focusedFieldId={focusedFieldId}
+              setFocusedFieldId={setFocusedFieldId}
+              editingFieldId={editingFieldId}
+              setEditingFieldId={setEditingFieldId}
+              editingValue={editingValue}
+              setEditingValue={setEditingValue}
+              editingButtonCardId={editingButtonCardId}
+              setEditingButtonCardId={setEditingButtonCardId}
+              onUpdate={onUpdate}
+              handleImageUpload={handleImageUpload}
+              handleDeleteImage={handleDeleteImage}
+              handleDuplicateTitle={handleDuplicateTitle}
+              handleDuplicateDescription={handleDuplicateDescription}
+              handleDeleteTitle={handleDeleteTitle}
+              handleDeleteDescription={handleDeleteDescription}
+              handleStartEditingTitle={handleStartEditingTitle}
+              handleStartEditingDescription={handleStartEditingDescription}
+              handleSaveEditTitle={handleSaveEditTitle}
+              handleSaveEditDescription={handleSaveEditDescription}
+              handleAddButton={handleAddButton}
+              handleOpenButtonEditor={handleOpenButtonEditor}
+              handleUpdateButton={handleUpdateButton}
+              handleDeleteButton={handleDeleteButton}
+              handleAddBlockToCard={handleAddBlockToCard}
+              handleDeleteBlockFromCard={handleDeleteBlockFromCard}
+              handleUpdateBlockInCard={handleUpdateBlockInCard}
+            />
+          </div>
         ))}
       </div>
 

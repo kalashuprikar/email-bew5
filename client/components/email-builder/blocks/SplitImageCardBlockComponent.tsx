@@ -248,14 +248,24 @@ export const SplitImageCardBlockComponent: React.FC<
 
   const handleUpdateTitle = (id: string, content: string) => {
     const newTitles = titles.map((t) => (t.id === id ? { ...t, content } : t));
-    onBlockUpdate({ ...block, titles: newTitles });
+    // Keep legacy title field in sync with the first title
+    const update: any = { titles: newTitles };
+    if (newTitles.length > 0 && newTitles[0].id === id) {
+      update.title = content;
+    }
+    onBlockUpdate({ ...block, ...update });
   };
 
   const handleUpdateDescription = (id: string, content: string) => {
     const newDescriptions = descriptions.map((d) =>
       d.id === id ? { ...d, content } : d,
     );
-    onBlockUpdate({ ...block, descriptions: newDescriptions });
+    // Keep legacy description field in sync with the first description
+    const update: any = { descriptions: newDescriptions };
+    if (newDescriptions.length > 0 && newDescriptions[0].id === id) {
+      update.description = content;
+    }
+    onBlockUpdate({ ...block, ...update });
   };
 
   const handleUpdateButton = (id: string, text: string, link: string) => {

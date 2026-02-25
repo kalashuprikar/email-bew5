@@ -22,6 +22,7 @@ interface DraggableBlockProps {
   onAddBlock: (block: ContentBlock, position: number) => void;
   onDuplicate: (block: ContentBlock, position: number) => void;
   onDelete: (blockId: string) => void;
+  onSubElementSelect?: (id: string | null) => void;
   isPartOfInlineGroup?: boolean;
 }
 
@@ -40,6 +41,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   onAddBlock,
   onDuplicate,
   onDelete,
+  onSubElementSelect,
   isPartOfInlineGroup,
 }) => {
   const [isHovering, setIsHovering] = React.useState(false);
@@ -118,6 +120,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
         onAddBlock={onAddBlock}
         onDuplicate={onDuplicate}
         onDelete={onDelete}
+        onSubElementSelect={onSubElementSelect}
         blockIndex={index}
       />
 
