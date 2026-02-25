@@ -98,10 +98,12 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       onClick={(e) => {
-        e.stopPropagation();
-        // Always select the block when clicked
-        onBlockSelect(block.id);
-        setIsBlockSelected(true);
+        // Don't change selection if we're currently editing
+        if (!isEditing) {
+          // Always select the block when clicked
+          onBlockSelect(block.id);
+          setIsBlockSelected(true);
+        }
       }}
     >
       <BlockRenderer

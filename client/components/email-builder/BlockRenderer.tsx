@@ -54,10 +54,11 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
   blockIndex = 0,
 }) => {
   const handleClick = (e: React.MouseEvent) => {
-    // Stop propagation to prevent parent element clicks
-    e.stopPropagation();
-    // Always select the block when clicked, regardless of target
-    onBlockSelect?.(block.id);
+    // Don't stop propagation - let inner elements handle clicks
+    // This allows footer sub-elements like "Enterprise Name" to be clicked
+    if (e.target === e.currentTarget) {
+      onBlockSelect?.(block.id);
+    }
   };
 
   switch (block.type) {
