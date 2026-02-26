@@ -427,6 +427,10 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
         <div
           draggable
           className="relative px-4 py-2 rounded transition-all w-full cursor-move"
+          onClick={(e) => {
+            e.stopPropagation();
+            onElementSelect?.("heading");
+          }}
           onDragStart={(e) => {
             e.dataTransfer.effectAllowed = "move";
             e.dataTransfer.setData("text/plain", "heading");
@@ -2256,7 +2260,13 @@ export const ContentImageBlockPreview: React.FC<BlockPreviewProps> = ({
 
           {/* Content */}
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">
+            <h3
+              className="text-xl font-bold text-gray-900 mb-2 cursor-pointer hover:text-valasys-orange transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                onElementSelect?.("heading");
+              }}
+            >
               {props.title || "Some title here"}
             </h3>
             <p className="text-gray-600 text-sm mb-4 whitespace-pre-wrap">
