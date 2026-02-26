@@ -249,9 +249,9 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
 
   return (
     <DndProvider backend={HTML5Backend}>
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100" style={{ transform: 'scale(0.8)', transformOrigin: 'top left', width: '125vw', height: '125vh' }}>
       {/* Left Sidebar - Blocks Panel */}
-      <div className="w-72 bg-white border-r border-gray-200 overflow-hidden flex flex-col">
+      <div className="w-[450px] bg-white border-r border-gray-200 overflow-hidden flex flex-col">
         <div className="sticky top-0 z-20 bg-white border-b border-gray-200 p-4">
           <Button
             variant="ghost"
@@ -277,7 +277,7 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
 
       {/* Middle - Sections Panel (conditional) */}
       {isSectionsPanelOpen && (
-        <div className="w-80 bg-white border-r border-gray-200 overflow-hidden flex flex-col">
+        <div className="w-[420px] bg-white border-r border-gray-200 overflow-hidden flex flex-col">
           <SectionsPanel
             onSelectTemplate={handleSelectTemplate}
             onBack={() => setIsSectionsPanelOpen(false)}
@@ -288,7 +288,7 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
       {/* Center - Main Editor Area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
+        <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <div className="flex-1">
             <Input
               value={pageName}
@@ -328,8 +328,8 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
         </div>
 
         {/* Preview Area */}
-        <div className="flex-1 overflow-y-auto bg-gray-50 p-8">
-          <div className="max-w-4xl mx-auto">
+        <div className="flex-1 overflow-y-auto bg-gray-50 p-4">
+          <div>
             <DraggableLandingPagePreview
               page={page}
               selectedBlockId={selectedBlockId}
@@ -359,7 +359,7 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
       </div>
 
       {/* Right Sidebar - Settings or Content Panel */}
-      <div className="w-96 bg-white border-l border-gray-200 overflow-hidden flex flex-col">
+      <div className="w-[480px] bg-white border-l border-gray-200 overflow-hidden flex flex-col">
         {selectedElement ? (
           <ElementContentPanel
             block={selectedBlock}
