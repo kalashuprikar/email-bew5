@@ -101,7 +101,7 @@
 @layer components {
   /* Email Builder - 80% scale */
   .email-builder-page {
-    font-size: 12.8px;
+    zoom: 0.8;
   }
 
   /* Custom animations for charts */
