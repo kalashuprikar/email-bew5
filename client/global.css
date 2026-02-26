@@ -9,6 +9,7 @@
    * A different format will require also updating the theme in tailwind.config.ts.
   */
   :root {
+    font-size: 12.8px;
     --background: 0 0% 100%;
     --foreground: 213 27% 18%;
 
