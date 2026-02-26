@@ -101,11 +101,11 @@
 @layer components {
   /* Email Builder - 80% scale */
   .email-builder-page {
-    transform: scale(0.8);
-    transform-origin: top left;
-    width: 125%;
-    height: 125%;
-    position: relative;
+    zoom: 0.8;
+  }
+
+  .email-builder-page main {
+    overflow: visible !important;
   }
 
   /* Custom animations for charts */
